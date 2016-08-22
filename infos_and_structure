@@ -1,0 +1,24 @@
+Create a shiny app for landscape and ecological genomics
+
+Use the navBar function in the shiny UI package. The function allowzs to create different tab
+
+Here are the Tabs with the Submeno
+
+1) File Conversion: Convert File (hmp of vcf) for LFMM or sNMF
+	LFMM
+	sNMF
+
+2) Bioclimatic Data: download and select the best bioclimatic data
+	Download data: Download Data for your coordinates
+	PCA: PCA downloaded data + Loading summary + select most representative variables
+
+3) Population Structure:
+	sNMF: population structure evaluation
+
+4) Association analysis LFMM:
+	choose best K
+	Run association + download results
+	manhatthan plot + download image
+
+
+ 
