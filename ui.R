@@ -5,6 +5,7 @@ shinyUI(navbarPage('LGapp',
 		sidebarPanel(
 			h2('Convert VCF files'),
 			tags$hr(),
+			helpText('Convert VCF files to geno or LFMM format for further analysis'),
 			fileInput('vcf', 'Choose VCF file'),
 			tags$hr(),
 			selectInput('outformat',
