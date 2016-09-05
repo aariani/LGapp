@@ -18,7 +18,7 @@ shinyServer(function(input, output){
 			'lfmm'='Landscape Genomic analysis (LFMM format)',
 			'geno'='Population clustering analysis (geno format)'
 			)
-		paste('Converting VCF file for', formdat, 'in', input$outdir)
+		paste('Converting VCF file', input$vcf, 'in', formdat, 'in', getwd())
 ### output data
 		})
 
