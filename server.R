@@ -1,7 +1,11 @@
 # server.R
 library(LEA)
+library(shinyFiles)
+
 
 shinyServer(function(input, output){
+
+	shinyFileChoose(input, 'vcf',  root=c(root='.'))
 	
 #	outform=reactive({
 #		switch(input$outformat,
