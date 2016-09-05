@@ -6,13 +6,15 @@ shinyUI(navbarPage('LGapp',
 			h2('Convert VCF files'),
 			tags$hr(),
 			helpText('Convert VCF files to geno or LFMM format for further analysis'),
+			helpText('This will create a geno or lfmm file in the directory with the vcf file'),
 			fileInput('vcf', 'Choose VCF file'),
 			tags$hr(),
 			selectInput('outformat',
 				'Select Output Format',
 				choices=c('lfmm', 'geno'),
 				)
-			)
+			),
+		mainPanel(textOutput('text1'))
 		),
 	navbarMenu('Bioclimatic Data',
 		tabPanel('Download',

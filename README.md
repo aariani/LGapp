@@ -5,3 +5,5 @@ This is a graphical interface with a collection of tools useful for Landscape ge
 
 ## Dependencies
 
+*	shiny
+
