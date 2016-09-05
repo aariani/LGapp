@@ -5,8 +5,8 @@ library(shinyFiles)
 
 shinyServer(function(input, output){
 
-	shinyFileChoose(input, 'vcf',  root=c(root='.'))
-	shinyDirChoose(input, 'outdir', root=c(root='.'))
+	shinyFileChoose(input, 'vcf',  root=c(getwd()))
+	shinyDirChoose(input, 'outdir', root=c(getwd()))
 #	outform=reactive({
 #		switch(input$outformat,
 #		'lfmm'='Landscape Genomic analysis (LFMM format)',
