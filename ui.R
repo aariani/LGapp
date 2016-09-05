@@ -12,7 +12,10 @@ shinyUI(navbarPage('LGapp',
 			selectInput('outformat',
 				'Select Output Format',
 				choices=c('lfmm', 'geno'),
-				)
+				),
+			tags$hr(),
+			helpText('Select output directory'),
+			shinyDirButton('outdir', 'Choose output folder', 'Please select output folder')
 			),
 		mainPanel(textOutput('text1'))
 		),
