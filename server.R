@@ -5,8 +5,8 @@ library(shinyFiles)
 
 shinyServer(function(input, output){
 
-	shinyFileChoose(input, 'vcf',  root=c(wd=getwd()))
-	shinyDirChoose(input, 'outdir', root=c(wd=getwd()))
+	shinyFileChoose(input, 'vcf',  root=c(wd='~'))
+	shinyDirChoose(input, 'outdir', root=c(wd='~'))
 #	outform=reactive({
 #		switch(input$outformat,
 #		'lfmm'='Landscape Genomic analysis (LFMM format)',
@@ -18,7 +18,7 @@ shinyServer(function(input, output){
 			'lfmm'='Landscape Genomic analysis (LFMM format)',
 			'geno'='Population clustering analysis (geno format)'
 			)
-		paste('Converting VCF file', input$vcf, 'in', formdat, 'in', getwd())
+		paste('Converting VCF file for', formdat, 'in', input$outdir, input$vcf)
 ### output data
 		})
 
