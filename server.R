@@ -12,24 +12,40 @@ shinyServer(function(input, output){
 ### function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home='~'), input$vcf)})
 
+### get the prefix of the file	
+	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]})
+
+## Get output folder
+	outfold=reactive({parseDirPath(c(home='~'), input$outdir)})
+
+### Get data file
 	getData=reactive({
 		if (is.null(input$vcf))
 			return(NULL)
-		### I dunno why I cannot make this function works
-		vcf2lfmm(as.character(vcf()[1,4]))
+#### Copy the file in the local folder
+		file.copy(as.character(vcf()[1,4]), '.')
+		vcf2lfmm(as.character(vcf()[1,1]))
 		})
 
-	output$text1= renderText({
+### clean data
+	cleanData=reactive({
+		if (is.null(input$outdir))
+			return(NULL)	
+		allfiles=list.files('.', pattern=prefix())
+		for (i in allfiles)
+			file.copy(i, outfold())		
+		
+		file.remove(allfiles)
+		})
+
+	
+	output$text1= renderPrint({
 		if (is.null(input$vcf))
 			return(NULL)
-##### You need tio get the parseFilePath function for getting the path of the file		
-#		vcf=parseFilePaths(c(home='~'), input$vcf)
-#		inputFilePath=input$vcf
-#		inputFilePath=inputFilePath$'0'
-#		inputFilePath=paste(inputFilePath[2:length(inputFilePath)], collapse='/')
-#		vcf2lfmm(as.character(s[1,4]))
 		getData()
-		paste('Converting VCF file named',  vcf()[1,4])
+
+		cleanData()
+		paste('Converting', vcf()[1,1], 'into', outfold())
 ### output data
 		})
 	})
