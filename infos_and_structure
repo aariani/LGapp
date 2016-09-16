@@ -9,7 +9,8 @@ Here are the Tabs with the Submeno
 	sNMF
 
 2) Bioclimatic Data: download and select the best bioclimatic data
-	Download data: Download Data for your coordinates
+	Download data: Download Data for your coordinates. Output a Table with googleVis with the coordinates on the top,
+	and the table of climatic data in the lower part of it
 	PCA: PCA downloaded data + Loading summary + select most representative variables
 
 3) Population Structure:

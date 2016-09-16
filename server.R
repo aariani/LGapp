@@ -41,4 +41,8 @@ shinyServer(function(input, output){
 		paste('Converting Files into', outfold(), 'folder')
 		})
 #### Conversion Tab chunk END
+
+	output$bioclim=renderPrint({
+		paste(input$climdata)
+		})
 	})
