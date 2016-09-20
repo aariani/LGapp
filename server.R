@@ -4,7 +4,7 @@ library(dismo)
 library(rasterVis)
 library(maptools)
 library(rgeos)
-source('plotData.R')
+#source('plotData.R') ### script with all the plot data informations look at https://pakillo.github.io/R-GIS-tutorial/#mapping
 
 
 shinyServer(function(input, output){
