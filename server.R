@@ -1,6 +1,10 @@
 # server.R
 library(LEA)
-library(shinyFiles)
+library(dismo)
+library(rasterVis)
+library(maptools)
+library(rgeos)
+source('plotData.R')
 
 
 shinyServer(function(input, output){
@@ -8,6 +12,7 @@ shinyServer(function(input, output){
 	shinyDirChoose(input, 'outdir', root=c(home='~'))
 
 #### Conversion Tab chunk START
+## maybe you should put everything on a single file?
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home='~'), input$vcf)})
