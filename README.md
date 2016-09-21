@@ -5,5 +5,8 @@ This is a graphical interface with a collection of tools useful for Landscape ge
 
 ## Dependencies
 
-*	shiny
+*	shiny: shiny and shinyFiles
 
+*	Landscape genomic: LEA (from bioconductor)
+
+*	Spatial analysis: dismo, googleVis

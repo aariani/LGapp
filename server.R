@@ -4,15 +4,17 @@ library(dismo)
 library(rasterVis)
 library(maptools)
 library(rgeos)
+library(googleVis)
 #source('plotData.R') ### script with all the plot data informations look at https://pakillo.github.io/R-GIS-tutorial/#mapping
+source('helper.R')
 
 
 shinyServer(function(input, output){
 	shinyFileChoose(input, 'vcf',  root=c(home='~'))
 	shinyDirChoose(input, 'outdir', root=c(home='~'))
+#########################################
+#### Conversion Tab START ###############
 
-#### Conversion Tab chunk START
-## maybe you should put everything on a single file?
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home='~'), input$vcf)})
@@ -45,9 +47,40 @@ shinyServer(function(input, output){
 		cleanData()
 		paste('Converting Files into', outfold(), 'folder')
 		})
-#### Conversion Tab chunk END
+#### Conversion Tab chunk END ##########
+########################################
 
-	output$bioclim=renderPrint({
-		paste(input$climdata)
+########################################
+#### Climatic Data Start ###############
+
+#############################
+#### Download ###############
+#############################
+
+## you can use renderGvis for rendering an html data type with the coordinates
+## but you need to create a function in the main body of the server.R
+	getGvismap=function(){
+		coordFile=input$coord
+		plotMap(coordFile$datapath)
+		}
+	output$bioclim=renderGvis({
+		coordFile=input$coord
+		if (is.null(coordFile)) return(NULL)
+		getGvismap()
+		})	
+## get bioclimatic data
+	getBioclimData=reactive({
+		coordFile=input$coord
+		extractBiovar(coordFile$datapath, input$climdata)
 		})
-	})
+## Output table
+
+## Download buttons
+
+
+})
+
+
+
+
+

@@ -56,7 +56,10 @@ shinyUI(navbarPage('LGapp',
 			helpText('This step will plot the positions of the coordinates in the input file on a map, and will allow to download the bioclimatic variables for each of the coordinates in the input file'),
 			tags$hr(),
 			helpText('Data downloaded from the ', a('WorldClim database', href='http://www.worldclim.org/'))),
-			mainPanel(verbatimTextOutput('bioclim'))
+			mainPanel(
+				htmlOutput('bioclim'),
+				downloadButton('downloadData', 'Download')
+				)
 			),
 		tabPanel('PCA',
 			sidebarPanel(
