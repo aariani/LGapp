@@ -10,18 +10,18 @@ source('helper.R')
 
 
 shinyServer(function(input, output){
-	shinyFileChoose(input, 'vcf',  root=c(home='~'))
-	shinyDirChoose(input, 'outdir', root=c(home='~'))
+	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
+	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 #########################################
 #### Conversion Tab START ###############
 
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
-	vcf=reactive({parseFilePaths(c(home='~'), input$vcf)})
+	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)})
 ## get the prefix of the file	
 	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]})
 ## Get output folder
-	outfold=reactive({parseDirPath(c(home='~'), input$outdir)})
+	outfold=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)})
 ## Get data file in a local folder
 	getData=reactive({
 ## Copy the file in the local folder

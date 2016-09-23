@@ -1,6 +1,8 @@
 ## ui.R
 
 shinyUI(navbarPage('LGapp',
+######################################
+#### Data conversion #################
 	tabPanel('Data Conversion',
 		sidebarPanel(
 			h2('Convert VCF files'),
@@ -17,6 +19,9 @@ shinyUI(navbarPage('LGapp',
 			h3(textOutput('text2'))
 			)
 		),
+
+#######################################
+#### Climatic Data ###################
 	navbarMenu('Bioclimatic Data',
 		tabPanel('Download',
 		sidebarPanel(
@@ -50,12 +55,11 @@ shinyUI(navbarPage('LGapp',
 				),
 			tags$hr(),
 			fileInput('coord', 'Select file with coordinates', accept='.csv'),
-			p('The conversion requires a csv file comma separated with 3 columns. The First colum should contains the Genotype ID.'),
-			p('The second column should be labeled as',  strong('Latitude'), 'while the third column should be labeled as', strong('Longitude')),
+			helpText('The conversion requires a comma separated csv file with 3 columns. The First colum should contains the Genotype ID, the second the Latitude and the third the longitude'),
 			tags$hr(),
-			helpText('This step will plot the positions of the coordinates in the input file on a map, and will allow to download the bioclimatic variables for each of the coordinates in the input file'),
-			tags$hr(),
-			helpText('Data downloaded from the ', a('WorldClim database', href='http://www.worldclim.org/'))),
+			helpText('Data downloaded from the ', a('WorldClim database', href='http://www.worldclim.org/')),
+			helpText('This step will plot the positions of the coordinates in the input file on a map, 
+				and will allow to download the bioclimatic variables for each of the coordinates in the input file')),
 			mainPanel(
 				htmlOutput('bioclim'),
 				downloadButton('downloadData', 'Download')
