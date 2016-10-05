@@ -59,6 +59,7 @@ shinyServer(function(input, output){
 
 ## you can use renderGvis for rendering an html data type with the coordinates
 ## but you need to create a function in the main body of the server.R
+	shinyDirChoose(input, 'climdir', root=c(home=path.expand('~'))) ## set up directory
 	getGvismap=function(){
 		coordFile=input$coord
 		plotMap(coordFile$datapath)

@@ -57,9 +57,8 @@ shinyUI(navbarPage('LGapp',
 			fileInput('coord', 'Select file with coordinates', accept='.csv'),
 			helpText('The conversion requires a comma separated csv file with 3 columns. The First colum should contains the Genotype ID, the second the Latitude and the third the longitude'),
 			tags$hr(),
-			helpText('Data downloaded from the ', a('WorldClim database', href='http://www.worldclim.org/')),
-			helpText('This step will plot the positions of the coordinates in the input file on a map, 
-				and will allow to download the bioclimatic variables for each of the coordinates in the input file')),
+			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
+			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/'))),
 			mainPanel(
 				htmlOutput('bioclim'),
 				downloadButton('downloadData', 'Download')

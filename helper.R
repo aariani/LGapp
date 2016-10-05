@@ -10,4 +10,4 @@ plotMap=function(coord){
 	return(l)
 	}
 
-
+exportClimVar=function(coord, climVarFolder){}
