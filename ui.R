@@ -27,7 +27,7 @@ shinyUI(navbarPage('LGapp',
 		sidebarPanel(
 			h2('Download bioclimatic data'),
 			tags$hr(),
-			checkboxGroupInput('climdata',
+			checkboxGroupInput('climvar',
 				label='Select Climatic Data', 
 				choices=c('BIO1 = Annual Mean Temperature'='bio_1',
 					'BIO2 = Mean Diurnal Range'='bio_2',
@@ -58,10 +58,13 @@ shinyUI(navbarPage('LGapp',
 			helpText('The conversion requires a comma separated csv file with 3 columns. The First colum should contains the Genotype ID, the second the Latitude and the third the longitude'),
 			tags$hr(),
 			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
-			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/'))),
+			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/')),
+			tags$hr(),
+			downloadButton('download_clim', 'Download')),
 			mainPanel(
 				htmlOutput('bioclim'),
-				downloadButton('downloadData', 'Download')
+				dataTableOutput('climTable')
+#				downloadButton('download_clim', 'Download')
 				)
 			),
 		tabPanel('PCA',

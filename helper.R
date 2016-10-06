@@ -1,5 +1,6 @@
 #### helper functions
 
+#### Plot map of coordinates
 plotMap=function(coord){
 	n=read.csv(coord, sep=',', header=T)
 ### you have to modify the dataset
@@ -10,4 +11,26 @@ plotMap=function(coord){
 	return(l)
 	}
 
-exportClimVar=function(coord, climVarFolder){}
+
+#### extract bioclimatic variables
+
+extractBiovar=function(coord, climvar, folder){ ### need also the location of the
+	n=read.csv(coord, sep=',', header=T)
+	pos=n[,c(3,2)]
+	biofiles=list.files(path=folder, pattern='bil', full.names=T)
+	variables=stack(biofiles)
+	vals=extract(variables, pos)
+	vals=vals[,climvar]
+	vals=cbind.data.frame(n[,1], vals)
+	colnames(vals)[1]='Genotype'
+	vals
+	}
+
+
+
+
+
+
+	
+
+

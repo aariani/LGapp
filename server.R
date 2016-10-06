@@ -1,9 +1,9 @@
 # server.R
 library(LEA)
 library(dismo)
-library(rasterVis)
-library(maptools)
-library(rgeos)
+#library(rasterVis)
+#library(maptools)
+#library(rgeos)
 library(googleVis)
 #source('plotData.R') ### script with all the plot data informations look at https://pakillo.github.io/R-GIS-tutorial/#mapping
 source('helper.R')
@@ -71,13 +71,27 @@ shinyServer(function(input, output){
 		})	
 ## get bioclimatic data
 	getBioclimData=reactive({
+#		if (!is.null(input$climdir))
+#			return(NULL)
 		coordFile=input$coord
-		extractBiovar(coordFile$datapath, input$climdata)
+		climFolder=parseDirPath(c(home=path.expand('~')), input$climdir)
+		extractBiovar(coordFile$datapath, input$climvar, climFolder) ### need also the location of the folder
 		})
 ## Output table
-
+	output$climTable=renderDataTable({
+		if (is.null(input$climdir))
+			return(NULL)
+		getBioclimData()
+		})
 ## Download buttons
-
+	output$download_clim=downloadHandler(
+		filename=function(){
+			paste('climatic_data-', Sys.Date(), '.csv', sep='')
+			},
+		content=function(file){
+			write.table(getBioclimData(), file,  sep=',', col.names=T, quote=F, row.names=F)
+			}
+		)
 
 })
 
