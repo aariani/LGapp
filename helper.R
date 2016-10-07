@@ -28,7 +28,12 @@ extractBiovar=function(coord, climvar, folder){ ### need also the location of th
 
 
 
-
+getPCA=function(climFile){
+	n=read.table(climFile, sep=',', header=T, row.name=1)
+	pcanalysis=PCA(scale(n))
+	pcanalysis
+	}
+	
 
 
 	

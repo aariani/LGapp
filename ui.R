@@ -73,13 +73,16 @@ shinyUI(navbarPage('LGapp',
 				p('PCA analysis for identifying the most representative bioclimatic variables in your dataset (to be used for Landscape Genomic analysis).
 				You can also use the PC data as phenotypes'),
 				tags$hr(),
-				fileInput('climDat', 'Select file with climatic data'),
+				fileInput('climDat', 'Select file with climatic data', accept='.csv'),
 				tags$hr(),
 				helpText('You can use directly the output of the Bioclimatic Data download step.
 					Otherwise you can upload a comma separated csv file having the genotype ID in the first column')				
-				)
+				),
 ### output biplot in an image, and table with loadings
-			
+			mainPanel(
+				plotOutput('PCAplot', width='100%',height='800px'),
+				verbatimTextOutput('PCAsummary')
+				)
 			)
 		)
 	)

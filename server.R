@@ -5,6 +5,8 @@ library(dismo)
 #library(maptools)
 #library(rgeos)
 library(googleVis)
+library(ChemometricsWithR)
+
 #source('plotData.R') ### script with all the plot data informations look at https://pakillo.github.io/R-GIS-tutorial/#mapping
 source('helper.R')
 
@@ -96,10 +98,20 @@ shinyServer(function(input, output){
 ##############################
 #### PCA #####################
 ##############################
+	getPCAdata=reactive({
+		climFile=input$climDat
+		getPCA(climFile$datapath)
+		})
+
+	output$PCAplot=renderPlot({
+		if (!is.null(input$climDat))
+			biplot(getPCAdata(), show.names='loadings',loading.col='black')
+		})
+	output$PCAsummary=renderPrint({
+		if (!is.null(input$climDat))
+			summary(getPCAdata())
+		})
 	
-
-
-
 })
 
 
