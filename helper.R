@@ -34,6 +34,11 @@ getPCA=function(climFile){
 	pcanalysis
 	}
 	
+getID=function(climFile){
+	n=read.table(climFile, sep=',', header=T, row.name=1)
+	rownames(n)
+	}
+
 
 
 	

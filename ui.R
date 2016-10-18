@@ -60,7 +60,7 @@ shinyUI(navbarPage('LGapp',
 			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
 			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/')),
 			tags$hr(),
-			downloadButton('download_clim', 'Download')),
+			downloadButton('download_clim', 'Download bioclimatic data for each point')),
 			mainPanel(
 				htmlOutput('bioclim'),
 				dataTableOutput('climTable')
@@ -74,9 +74,15 @@ shinyUI(navbarPage('LGapp',
 				You can also use the PC data as phenotypes'),
 				tags$hr(),
 				fileInput('climDat', 'Select file with climatic data', accept='.csv'),
-				tags$hr(),
 				helpText('You can use directly the output of the Bioclimatic Data download step.
-					Otherwise you can upload a comma separated csv file having the genotype ID in the first column')				
+					Otherwise you can upload a comma separated csv file having the genotype ID in the first column'),
+				tags$hr(),
+				h3('Download PCA coordinates and loadings'),
+				textInput('n_PCs', label=p('Type number of PCs to download')),
+				tags$hr(),
+				downloadButton('pc_coord', 'Download PC coordinates'),
+				tags$hr(),
+				downloadButton('pc_load', 'Download PC loadings')				
 				),
 ### output biplot in an image, and table with loadings
 			mainPanel(

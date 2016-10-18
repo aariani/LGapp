@@ -16,7 +16,6 @@ shinyServer(function(input, output){
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 #########################################
 #### Conversion Tab START ###############
-
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)})
@@ -103,6 +102,11 @@ shinyServer(function(input, output){
 		getPCA(climFile$datapath)
 		})
 
+	genoID=reactive({
+		climFile=input$climDat
+		getID(climFile$datapath)	
+		})
+	
 	output$PCAplot=renderPlot({
 		if (!is.null(input$climDat))
 			biplot(getPCAdata(), show.names='loadings',loading.col='black')
@@ -111,7 +115,26 @@ shinyServer(function(input, output){
 		if (!is.null(input$climDat))
 			summary(getPCAdata())
 		})
-	
+
+	output$pc_coord=downloadHandler(
+		filename=function(){
+			paste('Coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
+			},
+		content=function(file){
+			PCcord=getPCAdata()$scores[,1:as.numeric(input$n_PCs)]
+			rownames(PCcord)=genoID()
+			write.table(PCcord, file, sep=',', col.names=T, quote=F, row.name=T)
+			}
+		)
+	output$pc_load=downloadHandler(
+	#	if (!is.null(input$n_PCs))	
+		filename=function(){
+			paste('Loadings_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
+			},
+		content=function(file){
+			write.table(getPCAdata()$loadings[,1:as.numeric(input$n_PCs)], file, sep=',', col.names=T, quote=F, row.names=T)
+			}
+		)
 })
 
 
