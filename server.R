@@ -16,6 +16,7 @@ shinyServer(function(input, output){
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 #########################################
 #### Conversion Tab START ###############
+
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)})
@@ -48,16 +49,11 @@ shinyServer(function(input, output){
 		cleanData()
 		paste('Converting Files into', outfold(), 'folder')
 		})
-#### Conversion Tab chunk END ##########
-########################################
 
 ########################################
 #### Climatic Data Start ###############
-
 #############################
 #### Download ###############
-#############################
-
 ## you can use renderGvis for rendering an html data type with the coordinates
 ## but you need to create a function in the main body of the server.R
 	shinyDirChoose(input, 'climdir', root=c(home=path.expand('~'))) ## set up directory
@@ -96,7 +92,6 @@ shinyServer(function(input, output){
 
 ##############################
 #### PCA #####################
-##############################
 	getPCAdata=reactive({
 		climFile=input$climDat
 		getPCA(climFile$datapath)
@@ -135,6 +130,30 @@ shinyServer(function(input, output){
 			write.table(getPCAdata()$loadings[,1:as.numeric(input$n_PCs)], file, sep=',', col.names=T, quote=F, row.names=T)
 			}
 		)
+################################
+### Population Structure #######
+	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))
+### get geno file
+	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
+### do sNMF analysis
+	sNMF_analysis=reactive({
+	if (!is.null(geno()))
+		file.copy(as.character(geno()[1,4]), '.')
+		snmf(as.character(geno()[1,1]), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
+### maybe also remove the geno file. Add a name to the snmf. Remoive the file and then call the project
+		})
+### get best run
+	best_run=reactive({
+		ce=cross.entropy(sNMF_analysis(), K=input$n_K)
+		best=which.min(ce)
+		best
+		})
+### plot CE for choosing best K
+	output$CEplot=renderPlot({
+		if (!is.null(input$geno))
+			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
+			})
+
 })
 
 

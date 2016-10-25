@@ -7,11 +7,11 @@ shinyUI(navbarPage('LGapp',
 		sidebarPanel(
 			h2('Convert VCF files'),
 			tags$hr(),
-			helpText('Convert VCF files for downstream analysis'),
 			shinyFilesButton('vcf', 'Choose VCF file', 'Please select a file', multiple=F),
+			helpText('Convert VCF files for downstream analysis'),
 			tags$hr(),
-			helpText('Select output directory where export the converted files'),
-			shinyDirButton('outdir', 'Choose output folder', 'Please select output folder')
+			shinyDirButton('outdir', 'Choose output folder', 'Please select output folder'),
+			helpText('Select output directory where export the converted files')
 			),
 		mainPanel(
 			h2('Conversion Summary'),
@@ -89,7 +89,29 @@ shinyUI(navbarPage('LGapp',
 				plotOutput('PCAplot', width='100%',height='800px'),
 				verbatimTextOutput('PCAsummary')
 				)
+			)),
+#################################
+#### Population structure #######
+	tabPanel('Population structure',
+		sidebarPanel(
+			h2('Population structure analysis with sNMF'),
+			tags$hr(),
+			shinyFilesButton('geno', 'Choose geno file', 'Please select a file', multiple=F),
+			helpText('You can use the geno file created during the Data Conversion Step'),
+			tags$hr(),
+			sliderInput('K_range', label='Select K range', min=1, max=20, value=c(2,6)),
+			tags$hr(),
+			sliderInput('rep', label='Select number of repetition for each K', min=1, max=100, value=10),
+			tags$hr(),
+			h3('Download ancestry coefficient matrix'),
+			textInput('n_K', label=p('Type best number of K')),
+			tags$hr(),
+			downloadButton('K_matrix', 'Download')
+			),
+		mainPanel(
+			plotOutput('CEplot', width='100%',height='800px')
 			)
-		)
+		)	
+##############################	
 	)
 )
