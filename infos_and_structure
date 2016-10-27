@@ -22,4 +22,9 @@ Here are the Tabs with the Submeno
 	manhatthan plot + download image
 
 
- 
+
+Improve appeareance
+You can add small Icons in the differen analysis by using the icon=icon() function
+Go to http://fontawesome.io/icons/ for find more icons.
+
+See also this shiny APP created for genome analysis https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4620618/ 
