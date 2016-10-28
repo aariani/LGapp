@@ -1,8 +1,9 @@
 ## ui.R
 
-shinyUI(navbarPage('LGapp',
+shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 ######################################
 #### Data conversion #################
+#	fluidPage(theme=shinytheme('cosmo')),
 	tabPanel('Data Conversion',
 		sidebarPanel(
 			h2('Convert VCF files'),
