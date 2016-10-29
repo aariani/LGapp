@@ -1,4 +1,20 @@
 ## ui.R
+mycss <- "
+#plot-container {
+  position: relative;
+}
+#loading-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  margin-top: -33px;  /* half of the spinner's height */
+  margin-left: -33px; /* half of the spinner's width */
+}
+#plot.recalculating {
+  z-index: -2;
+}
+"
 
 shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 ######################################
@@ -110,7 +126,11 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			downloadButton('K_matrix', 'Download')
 			),
 		mainPanel(
-			plotOutput('CEplot', width='100%',height='800px')
+			tags$head(tags$style(HTML(mycss))),
+			div(id = "plot-container",
+			tags$img(src = "spinner.gif",
+			id = "loading-spinner"),
+			plotOutput('CEplot', width='100%',height='800px'))
 			)
 		)	
 ##############################	

@@ -1,4 +1,5 @@
 # server.R
+library(shinythemes)
 library(LEA)
 library(dismo)
 #library(rasterVis)
