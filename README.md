@@ -5,7 +5,7 @@ This is a graphical interface with a collection of tools useful for Landscape ge
 
 ## Dependencies
 
-*	shiny: shiny and shinyFiles
+*	shiny: shiny, shinyFiles, shinythemes
 
 *	Landscape genomic: LEA (from bioconductor)
 
