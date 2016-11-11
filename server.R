@@ -18,6 +18,9 @@ shinyServer(function(input, output){
 #########################################
 #### Conversion Tab START ###############
 
+### YOU CAN REMOVE ALL THESE GARBAGE LINES WITH 1 LINE CALLING A FUNCTION AND RETURNING MULTIPLE FUNCTIONS
+## ACTUALLY YOU COULD MOVE (FOR CLARITY) ALL THE FUNCTION HERE IN THE HELPER FILE AND AVOID TO WASTE LINES HERE
+
 ## you need to use a reactive expression for getting the file name with the parseFilePaths
 ## function and do ti outside of the output$text1 thing
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)})

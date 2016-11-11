@@ -1,5 +1,13 @@
-#### helper functions
+#### helper functions for LGapp
 
+
+
+### you can add all the
+
+
+########################################
+#### Climatic Data #####################
+########################################
 #### Plot map of coordinates
 plotMap=function(coord){
 	n=read.csv(coord, sep=',', header=T)
