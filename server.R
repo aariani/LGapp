@@ -15,36 +15,35 @@ source('helper.R')
 shinyServer(function(input, output){
 	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
+	ProjFolder=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # THIS IS THE MAIN PROJECT FOLDER
 #########################################
 #### Conversion Tab START ###############
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)}) # get VCF file
 	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]}) # get file prefix
-	outfold=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # get output folder
 # Copy data in local folder
 	getData=reactive({
 		file.copy(as.character(vcf()[1,4]), '.')
 		vcf2lfmm(as.character(vcf()[1,1]))
 		SNP_pos=read.table(as.character(vcf()[1,1]), sep='\t')
-		write.table(SNP_pos[,1:2], file=paste(prefix(), '.positions.txt', sep=''), sep='\t', row.name=F, col.name=F, quote=F)
+		write.table(SNP_pos[,1:2], file=paste(prefix(), 'positions.txt', sep=''), sep='\t', row.name=F, col.name=F, quote=F)
 		})
 # Transfer and clean files
 	cleanData=reactive({
 		allfiles=list.files('.', pattern=prefix())
 		for (i in allfiles)
-			file.copy(i, outfold())		
+			file.copy(i, ProjFolder())		
 			file.remove(allfiles)
 		})
 ## Output data	
 	output$text1= renderPrint({
 		if (!is.null(input$vcf))
-			##paste('Conversion Summary')
-			getData()	
+			getData()
 		})
 	output$text2=renderText({
 		if (is.null(input$outdir))
 			return(NULL)	
-		cleanData()
-		paste('Converting Files into', outfold(), 'folder')
+		tryCatch({cleanData()}, error = function(e){})
+		paste('Selected', ProjFolder(), 'as Project Folder')
 		})
 
 ########################################
@@ -74,16 +73,19 @@ shinyServer(function(input, output){
 		if (is.null(input$climdir))
 			return(NULL)
 		getBioclimData()
+#		if (input$download_clim == T){
+#			write.table(getBioclimData(), paste(ProjFolder(), '/climatic-data', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
+#			}
 		})
 ## Download buttons
-	output$download_clim=downloadHandler(
-		filename=function(){
-			paste('climatic_data-', Sys.Date(), '.csv', sep='')
-			},
-		content=function(file){
-			write.table(getBioclimData(), file,  sep=',', col.names=T, quote=F, row.names=F)
-			}
-		)
+#	output$download_clim=downloadHandler(
+#		filename=function(){
+#			paste('climatic_data-', Sys.Date(), '.csv', sep='')
+#			},
+#		content=function(file){
+#			write.table(getBioclimData(), file,  sep=',', col.names=T, quote=F, row.names=F)
+#			}
+#		)
 
 ##############################
 #### PCA #####################

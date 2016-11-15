@@ -4,24 +4,23 @@ Use the navBar function in the shiny UI package. The function allowzs to create 
 
 Here are the Tabs with the Submeno
 
-1) File Conversion: Convert File (hmp of vcf) for LFMM or sNMF
-	LFMM
-	sNMF
+1) Home page: select project folder
+2) File Conversion: Convert File (vcf) for LFMM and sNMF
 
-2) Bioclimatic Data: download and select the best bioclimatic data
+3) Bioclimatic Data: download and select the best bioclimatic data
 	Download data: Download Data for your coordinates. Output a Table with googleVis with the coordinates on the top,
 	and the table of climatic data in the lower part of it
 	PCA: PCA downloaded data + Loading summary + select most representative variables
 
-3) Population Structure:
+4) Population Structure:
 	sNMF: population structure evaluation
 
-4) Association analysis LFMM:
-	choose best K
-	Run association + download results
-	manhatthan plot + download image
+5) Genome scan:
+	Population differentiation
+	LFMM
 
-
+6) PostProcess data:
+	Find annotated features
 
 Improve appeareance
 You can add small Icons in the differen analysis by using the icon=icon() function
