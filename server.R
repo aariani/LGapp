@@ -17,24 +17,17 @@ shinyServer(function(input, output){
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 #########################################
 #### Conversion Tab START ###############
-
-### YOU CAN REMOVE ALL THESE GARBAGE LINES WITH 1 LINE CALLING A FUNCTION AND RETURNING MULTIPLE FUNCTIONS
-## ACTUALLY YOU COULD MOVE (FOR CLARITY) ALL THE FUNCTION HERE IN THE HELPER FILE AND AVOID TO WASTE LINES HERE
-
-## you need to use a reactive expression for getting the file name with the parseFilePaths
-## function and do ti outside of the output$text1 thing
-	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)})
-## get the prefix of the file	
-	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]})
-## Get output folder
-	outfold=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)})
-## Get data file in a local folder
+	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)}) # get VCF file
+	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]}) # get file prefix
+	outfold=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # get output folder
+# Copy data in local folder
 	getData=reactive({
-## Copy the file in the local folder
 		file.copy(as.character(vcf()[1,4]), '.')
 		vcf2lfmm(as.character(vcf()[1,1]))
+		SNP_pos=read.table(as.character(vcf()[1,1]), sep='\t')
+		write.table(SNP_pos[,1:2], file=paste(prefix(), '.positions.txt', sep=''), sep='\t', row.name=F, col.name=F, quote=F)
 		})
-## Transfer and clean files
+# Transfer and clean files
 	cleanData=reactive({
 		allfiles=list.files('.', pattern=prefix())
 		for (i in allfiles)
@@ -72,8 +65,6 @@ shinyServer(function(input, output){
 		})	
 ## get bioclimatic data
 	getBioclimData=reactive({
-#		if (!is.null(input$climdir))
-#			return(NULL)
 		coordFile=input$coord
 		climFolder=parseDirPath(c(home=path.expand('~')), input$climdir)
 		extractBiovar(coordFile$datapath, input$climvar, climFolder) ### need also the location of the folder
