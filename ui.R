@@ -95,10 +95,10 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 					Otherwise you can upload a comma separated csv file having the genotype ID in the first column'),
 				tags$hr(),
 				h3('Download PCA coordinates and loadings'),
-				numericInput('n_PCs', label=p('Type number of PCs to download'), value = 2),
+				numericInput('n_PCs', label=p('Type number of PCs to download'), value = 0),
 				tags$hr(),
 				checkboxInput('pc_coord', label = 'Download PC coordinates', value = F),
-			#	downloadButton('pc_coord', 'Download PC coordinates'),
+				h5(textOutput('pc_coord_text')),	
 				tags$hr(),
 				checkboxInput('pc_load', label = 'Download PC loadings', value = F)				
 			#	downloadButton('pc_load', 'Download PC loadings')				
