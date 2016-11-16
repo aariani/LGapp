@@ -72,20 +72,11 @@ shinyServer(function(input, output){
 	output$climTable=renderDataTable({
 		if (is.null(input$climdir))
 			return(NULL)
+		if (input$download_clim == T)
+			write.table(getBioclimData(), paste(ProjFolder(), '/climatic-data', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
 		getBioclimData()
-#		if (input$download_clim == T){
-#			write.table(getBioclimData(), paste(ProjFolder(), '/climatic-data', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
-#			}
 		})
-## Download buttons
-#	output$download_clim=downloadHandler(
-#		filename=function(){
-#			paste('climatic_data-', Sys.Date(), '.csv', sep='')
-#			},
-#		content=function(file){
-#			write.table(getBioclimData(), file,  sep=',', col.names=T, quote=F, row.names=F)
-#			}
-#		)
+
 
 ##############################
 #### PCA #####################
@@ -98,35 +89,45 @@ shinyServer(function(input, output){
 		climFile=input$climDat
 		getID(climFile$datapath)	
 		})
-	
+
+	PC_coord=reactive({
+		if (input$pc_coord == T)
+			PCcord=getPCAdata()$scores[,1:as.numeric(input$n_PCs)]
+			rownames(PCcord)=genoID()
+			write.table(PCcord, paste(ProjFolder(), '/Climatic_PCA_coordinates', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
+		})
+
 	output$PCAplot=renderPlot({
 		if (!is.null(input$climDat))
 			biplot(getPCAdata(), show.names='loadings',loading.col='black')
 		})
 	output$PCAsummary=renderPrint({
 		if (!is.null(input$climDat))
+			if (input$pc_coord == T) 
+				tryCatch({PC_coord()}, error=function(e){})
 			summary(getPCAdata())
 		})
 
-	output$pc_coord=downloadHandler(
-		filename=function(){
-			paste('Coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
-			},
-		content=function(file){
-			PCcord=getPCAdata()$scores[,1:as.numeric(input$n_PCs)]
-			rownames(PCcord)=genoID()
-			write.table(PCcord, file, sep=',', col.names=T, quote=F, row.name=T)
-			}
-		)
-	output$pc_load=downloadHandler(
-	#	if (!is.null(input$n_PCs))	
-		filename=function(){
-			paste('Loadings_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
-			},
-		content=function(file){
-			write.table(getPCAdata()$loadings[,1:as.numeric(input$n_PCs)], file, sep=',', col.names=T, quote=F, row.names=T)
-			}
-		)
+
+#	output$pc_coord=downloadHandler(
+#		filename=function(){
+#			paste('Coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
+#			},
+#		content=function(file){
+#			PCcord=getPCAdata()$scores[,1:as.numeric(input$n_PCs)]
+#			rownames(PCcord)=genoID()
+#			write.table(PCcord, file, sep=',', col.names=T, quote=F, row.name=T)
+#			}
+#		)
+#	output$pc_load=downloadHandler(
+#	#	if (!is.null(input$n_PCs))	
+#		filename=function(){
+#			paste('Loadings_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
+#			},
+#		content=function(file){
+#			write.table(getPCAdata()$loadings[,1:as.numeric(input$n_PCs)], file, sep=',', col.names=T, quote=F, row.names=T)
+#			}
+#		)
 ################################
 ### Population Structure #######
 	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))
