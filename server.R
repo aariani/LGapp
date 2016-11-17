@@ -70,19 +70,12 @@ shinyServer(function(input, output){
 		getBioclimData()
 		})
 
-
 ##############################
 #### PCA #####################
 	getPCAdata=reactive({
 		climFile=input$climDat
 		getPCA(climFile$datapath)
 		})
-
-	genoID=reactive({
-		climFile=input$climDat
-		getID(climFile$datapath)	
-		})
-
 	output$PCAplot=renderPlot({
 		if (!is.null(input$climDat))
 			biplot(getPCAdata(), show.names='loadings',loading.col='black')
@@ -91,26 +84,21 @@ shinyServer(function(input, output){
 		if (!is.null(input$climDat))
 			summary(getPCAdata())
 		})
-
 	output$pc_coord_text=renderText({
 		if (input$pc_coord == T)
-			tryCatch({PCcord=getPCAdata()$scores[,1:input$n_PCs]
-			rownames(PCcord)=genoID()
-			write.table(PCcord, paste(ProjFolder(), '/Climatic_PCA_coordinates_', input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)},
-			error=function(e){})
-			if (input$n_PCs > 0)	
-				paste('Download', 'Climatic_PCA_coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv')
+			write.table(getPCAdata()$scores[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_coordinates_', 
+				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
+		if (input$n_PCs > 0)	
+			paste('Download', 'Climatic_PCA_coordinates_', input$n_PCs, '_PCs_', Sys.Date(), '.csv')
 			})
-#		)
-#	output$pc_load=downloadHandler(
-#	#	if (!is.null(input$n_PCs))	
-#		filename=function(){
-#			paste('Loadings_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep='')
-#			},
-#		content=function(file){
-#			write.table(getPCAdata()$loadings[,1:as.numeric(input$n_PCs)], file, sep=',', col.names=T, quote=F, row.names=T)
-#			}
-#		)
+	output$pc_load_text=renderText({
+		if (input$pc_load == T)
+			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_loadings_', 
+				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
+		if (input$n_PCs > 0)
+			paste('Download', 'Climatic_PCA_loading_', input$n_PCs, '_PCs_', Sys.Date(), '.csv')
+		})
+		
 ################################
 ### Population Structure #######
 	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))

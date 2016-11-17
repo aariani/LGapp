@@ -83,7 +83,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				dataTableOutput('climTable')
 				)
 			),
-		tabPanel('PCA', icon=icon('fa fa-wrench'),
+		tabPanel('PCA', icon=icon('fa fa-object-group'),
 			sidebarPanel(
 				h2('PCA on bioclimatic variables'),
 				tags$hr(),
@@ -100,8 +100,8 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				checkboxInput('pc_coord', label = 'Download PC coordinates', value = F),
 				h5(textOutput('pc_coord_text')),	
 				tags$hr(),
-				checkboxInput('pc_load', label = 'Download PC loadings', value = F)				
-			#	downloadButton('pc_load', 'Download PC loadings')				
+				checkboxInput('pc_load', label = 'Download PC loadings', value = F),
+				h5(textOutput('pc_load_text'))				
 				),
 ### output biplot in an image, and table with loadings
 			mainPanel(
