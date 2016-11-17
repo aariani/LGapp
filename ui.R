@@ -22,18 +22,18 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 	tabPanel('Project Home', icon=icon('fa fa-home'),
 		sidebarPanel(
 			h2('Start your project'),
+			shinyDirButton('outdir', 'Choose Project Folder', 'Please select output folder'),
+			helpText('Select output directory where export the converted files'),
+			h3(textOutput('text2')),
+			tags$hr(),
 			shinyFilesButton('vcf', 'Choose VCF file', 'Please select a file', multiple=F),
 			helpText('Convert VCF files for downstream analysis'),
-			verbatimTextOutput('text1'),
-			tags$hr(),
-			shinyDirButton('outdir', 'Choose output folder', 'Please select output folder'),
-			helpText('Select output directory where export the converted files'),
-			h3(textOutput('text2'))
+			verbatimTextOutput('text1')
 			),
 		mainPanel(
 			h1(strong('Welcome to LGapp!!!'), align='center'), 
 			h2('a Shiny web-app for landscape genomics analysis within R', align='center'),
-			h3('For starting your landscape genomics project please select your SNPs file (in VCF format) and a Project Folder', align='center')
+			h3('For starting your landscape genomics project please select a ', strong('Project Folder'), ' and your SNPs file (in VCF format)', align='center')
 			)
 		),
 

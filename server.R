@@ -22,17 +22,11 @@ shinyServer(function(input, output){
 	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]}) # get file prefix
 # Copy data in local folder
 	getData=reactive({
+		setwd(ProjFolder())
 		file.copy(as.character(vcf()[1,4]), '.')
 		vcf2lfmm(as.character(vcf()[1,1]))
 		SNP_pos=read.table(as.character(vcf()[1,1]), sep='\t')
 		write.table(SNP_pos[,1:2], file=paste(prefix(), 'positions.txt', sep=''), sep='\t', row.name=F, col.name=F, quote=F)
-		})
-# Transfer and clean files
-	cleanData=reactive({
-		allfiles=list.files('.', pattern=prefix())
-		for (i in allfiles)
-			file.copy(i, ProjFolder())		
-			file.remove(allfiles)
 		})
 ## Output data	
 	output$text1= renderPrint({
@@ -42,7 +36,6 @@ shinyServer(function(input, output){
 	output$text2=renderText({
 		if (is.null(input$outdir))
 			return(NULL)	
-		tryCatch({cleanData()}, error = function(e){})
 		paste('Selected', ProjFolder(), 'as Project Folder')
 		})
 
@@ -73,7 +66,7 @@ shinyServer(function(input, output){
 		if (is.null(input$climdir))
 			return(NULL)
 		if (input$download_clim == T)
-			write.table(getBioclimData(), paste(ProjFolder(), '/climatic-data', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
+			write.table(getBioclimData(), paste(ProjFolder(), '/Climatic_data_', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
 		getBioclimData()
 		})
 
@@ -103,10 +96,10 @@ shinyServer(function(input, output){
 		if (input$pc_coord == T)
 			tryCatch({PCcord=getPCAdata()$scores[,1:input$n_PCs]
 			rownames(PCcord)=genoID()
-			write.table(PCcord, paste(ProjFolder(), '/Climatic_PCA_coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)},
+			write.table(PCcord, paste(ProjFolder(), '/Climatic_PCA_coordinates_', input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)},
 			error=function(e){})
-		if (input$n_PCs > 0)	
-			paste('Download', 'Climatic_PCA_coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv')
+			if (input$n_PCs > 0)	
+				paste('Download', 'Climatic_PCA_coordinates_', input$n_PCs, '_PC_', Sys.Date(), '.csv')
 			})
 #		)
 #	output$pc_load=downloadHandler(
