@@ -99,7 +99,7 @@ shinyServer(function(input, output){
 ### get geno file
 	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
 ### do sNMF analysis
-	sNMF_analysis=eventReactive(input$launch_sNMF, {
+	sNMF_analysis=reactive({
 		setwd(ProjFolder())
 		snmf(as.character(geno()[1,1]), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
 		})
@@ -111,8 +111,7 @@ shinyServer(function(input, output){
 		})
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
-	#	sNMF_analysis()
-		if (is.null(geno())) return()
+		if (is.null(input$geno)) return()
 		plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
 		})
 
