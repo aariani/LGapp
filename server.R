@@ -99,11 +99,9 @@ shinyServer(function(input, output){
 ### get geno file
 	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
 ### do sNMF analysis
-	sNMF_analysis=reactive({
-	if (!is.null(geno()))
-		file.copy(as.character(geno()[1,4]), '.')
+	sNMF_analysis=eventReactive(input$launch_sNMF, {
+		setwd(ProjFolder())
 		snmf(as.character(geno()[1,1]), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
-### maybe also remove the geno file. Add a name to the snmf. Remoive the file and then call the project
 		})
 ### get best run
 	best_run=reactive({
@@ -113,9 +111,10 @@ shinyServer(function(input, output){
 		})
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
-		if (!is.null(input$geno))
-			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
-			})
+	#	sNMF_analysis()
+		if (is.null(geno())) return()
+		plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
+		})
 
 })
 
