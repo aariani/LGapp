@@ -23,7 +23,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 		sidebarPanel(
 			h2('Start your project'),
 			shinyDirButton('outdir', 'Choose Project Folder', 'Please select output folder'),
-			helpText('Select output directory where export the converted files'),
+			helpText('Select output directory where exporting the files produced during the analysis'),
 			h3(textOutput('text2')),
 			tags$hr(),
 			shinyFilesButton('vcf', 'Choose VCF file', 'Please select a file', multiple=F),
@@ -77,7 +77,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
 			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/')),
 			tags$hr(),
-			checkboxInput('download_clim', label = 'Download Bioclimatic Variables to the Project Folder', value = F)),
+			actionButton('download_clim', label = 'Download Bioclimatic Variables')),
 			mainPanel(
 				htmlOutput('bioclim'),
 				dataTableOutput('climTable')
@@ -97,11 +97,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				h3('Download PCA coordinates and loadings'),
 				numericInput('n_PCs', label=p('Type number of PCs to download'), value = 0),
 				tags$hr(),
-				checkboxInput('pc_coord', label = 'Download PC coordinates', value = F),
-				h5(textOutput('pc_coord_text')),	
-				tags$hr(),
-				checkboxInput('pc_load', label = 'Download PC loadings', value = F),
-				h5(textOutput('pc_load_text'))				
+				actionButton('download_PCA', 'Download PCA data')
 				),
 ### output biplot in an image, and table with loadings
 			mainPanel(

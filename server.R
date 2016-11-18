@@ -65,11 +65,12 @@ shinyServer(function(input, output){
 	output$climTable=renderDataTable({
 		if (is.null(input$climdir))
 			return(NULL)
-		if (input$download_clim == T)
-			write.table(getBioclimData(), paste(ProjFolder(), '/Climatic_data_', Sys.Date(),'.csv', sep=''), sep=',', col.names=T, quote=F, row.names=F)
 		getBioclimData()
 		})
-
+	observeEvent(input$download_clim, {
+			write.table(getBioclimData(), paste(ProjFolder(), '/Climatic_data_', Sys.Date(),'.csv', sep=''), 
+			sep=',', col.names=T, quote=F, row.names=F)
+			})	
 ##############################
 #### PCA #####################
 	getPCAdata=reactive({
@@ -84,20 +85,13 @@ shinyServer(function(input, output){
 		if (!is.null(input$climDat))
 			summary(getPCAdata())
 		})
-	output$pc_coord_text=renderText({
-		if (input$pc_coord == T)
+	observeEvent(input$download_PCA, {
+		if (input$n_PCs > 0)
 			write.table(getPCAdata()$scores[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_coordinates_', 
 				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
-		if (input$n_PCs > 0)	
-			paste('Download', 'Climatic_PCA_coordinates_', input$n_PCs, '_PCs_', Sys.Date(), '.csv')
-			})
-	output$pc_load_text=renderText({
-		if (input$pc_load == T)
 			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_loadings_', 
 				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
-		if (input$n_PCs > 0)
-			paste('Download', 'Climatic_PCA_loading_', input$n_PCs, '_PCs_', Sys.Date(), '.csv')
-		})
+			})						
 		
 ################################
 ### Population Structure #######
