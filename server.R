@@ -23,6 +23,8 @@ shinyServer(function(input, output){
 # Copy data in local folder
 	getData=reactive({
 		setwd(ProjFolder())
+		dir.create('Data_conversion')
+		setwd('Data_conversion')
 		file.copy(as.character(vcf()[1,4]), '.')
 		vcf2lfmm(as.character(vcf()[1,1]))
 		SNP_pos=read.table(as.character(vcf()[1,1]), sep='\t')
@@ -68,7 +70,9 @@ shinyServer(function(input, output){
 		getBioclimData()
 		})
 	observeEvent(input$download_clim, {
-			write.table(getBioclimData(), paste(ProjFolder(), '/Climatic_data_', Sys.Date(),'.csv', sep=''), 
+			setwd(ProjFolder())
+			dir.create('Bioclimatic_data')
+			write.table(getBioclimData(), paste('Bioclimatic_data/Climatic_data_', Sys.Date(),'.csv', sep=''), 
 			sep=',', col.names=T, quote=F, row.names=F)
 			})	
 ##############################
@@ -87,21 +91,27 @@ shinyServer(function(input, output){
 		})
 	observeEvent(input$download_PCA, {
 		if (input$n_PCs > 0)
-			write.table(getPCAdata()$scores[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_coordinates_', 
+			write.table(getPCAdata()$scores[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_coordinates_', 
 				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
-			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste(ProjFolder(), '/Climatic_PCA_loadings_', 
+			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_loadings_', 
 				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
 			})						
 		
 ################################
 ### Population Structure #######
-	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))
+#	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))
 ### get geno file
-	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
+#	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
 ### do sNMF analysis
-	sNMF_analysis=reactive({
+#	sNMF_analysis = reactiveValues(data = NULL)
+	
+	sNMF_analysis = eventReactive(input$analyze_geno, {
 		setwd(ProjFolder())
-		snmf(as.character(geno()[1,1]), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
+		dir.create('Population_Structure')
+		setwd('Population_Structure')
+		fname = list.files('../Data_conversion', pattern = 'geno', full.names = T)
+		file.copy(fname, '.')
+		snmf(list.files('.', pattern ='geno'), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
 		})
 ### get best run
 	best_run=reactive({
@@ -111,8 +121,8 @@ shinyServer(function(input, output){
 		})
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
-		if (is.null(input$geno)) return()
-		plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
+		if (input$analyze_geno > 0)
+			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
 		})
 
 })
