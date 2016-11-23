@@ -19,7 +19,7 @@ mycss <- "
 shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 ######################################
 #### Data conversion #################
-	tabPanel('Project Home', icon=icon("fa fa-home"),
+	tabPanel('Project Home', icon=icon("home"),
 		sidebarPanel(
 			h2('Start your project'),
 			shinyDirButton('outdir', 'Choose Project Folder', 'Please select output folder'),
@@ -39,8 +39,8 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 
 #######################################
 #### Climatic Data ###################
-	navbarMenu('Bioclimatic Data', icon=icon('fa fa-globe'),
-		tabPanel('Download', icon=icon('fa fa-download'),
+	navbarMenu('Bioclimatic Data', icon=icon('globe'),
+		tabPanel('Download', icon=icon('download'),
 		sidebarPanel(
 			h2('Download bioclimatic data'),
 			tags$hr(),
@@ -83,7 +83,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				dataTableOutput('climTable')
 				)
 			),
-		tabPanel('PCA', icon=icon('fa fa-object-group'),
+		tabPanel('PCA', icon=icon('object-group'),
 			sidebarPanel(
 				h2('PCA on bioclimatic variables'),
 				tags$hr(),
@@ -107,7 +107,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			)),
 #################################
 #### Population structure #######
-	tabPanel('Population structure',icon=icon('fa fa-bar-chart'),
+	tabPanel('Population structure',icon=icon('bar-chart'),
 		sidebarPanel(
 			h2('Population structure analysis with sNMF'),
 			tags$hr(),
