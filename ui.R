@@ -19,7 +19,7 @@ mycss <- "
 shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 ######################################
 #### Data conversion #################
-	tabPanel('Project Home', icon=icon('fa fa-home'),
+	tabPanel('Project Home', icon=icon("fa fa-home"),
 		sidebarPanel(
 			h2('Start your project'),
 			shinyDirButton('outdir', 'Choose Project Folder', 'Please select output folder'),

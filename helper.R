@@ -1,9 +1,17 @@
 #### helper functions for LGapp
 
-
-
-### you can add all the
-
+########################################
+#### Data Conversion ###################
+########################################
+convertData =  function(pf, vcf){ # project folder, vcf file
+		setwd(pf)
+		dir.create('Data_conversion')
+		setwd('Data_conversion')
+		file.copy(as.character(vcf[1,4]), '.')
+		vcf2lfmm(as.character(vcf[1,1]))
+		SNP_pos=read.table(as.character(vcf[1,1]), sep='\t')
+		write.table(SNP_pos[,1:2], file='SNPs_positions.txt', sep='\t', row.name=F, col.name=F, quote=F)
+		}
 
 ########################################
 #### Climatic Data #####################

@@ -19,16 +19,9 @@ shinyServer(function(input, output){
 #########################################
 #### Conversion Tab START ###############
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)}) # get VCF file
-	prefix=reactive({strsplit(as.character(vcf()[1,1]), 'vcf')[[1]][1]}) # get file prefix
-# Copy data in local folder
+# Convert Data
 	getData=reactive({
-		setwd(ProjFolder())
-		dir.create('Data_conversion')
-		setwd('Data_conversion')
-		file.copy(as.character(vcf()[1,4]), '.')
-		vcf2lfmm(as.character(vcf()[1,1]))
-		SNP_pos=read.table(as.character(vcf()[1,1]), sep='\t')
-		write.table(SNP_pos[,1:2], file=paste(prefix(), 'positions.txt', sep=''), sep='\t', row.name=F, col.name=F, quote=F)
+		convertData(ProjFolder(), vcf())
 		})
 ## Output data	
 	output$text1= renderPrint({
@@ -72,7 +65,7 @@ shinyServer(function(input, output){
 	observeEvent(input$download_clim, {
 			setwd(ProjFolder())
 			dir.create('Bioclimatic_data')
-			write.table(getBioclimData(), paste('Bioclimatic_data/Climatic_data_', Sys.Date(),'.csv', sep=''), 
+			write.table(getBioclimData(), paste('Bioclimatic_data/Climatic_data','.csv', sep=''), 
 			sep=',', col.names=T, quote=F, row.names=F)
 			})	
 ##############################
@@ -92,9 +85,9 @@ shinyServer(function(input, output){
 	observeEvent(input$download_PCA, {
 		if (input$n_PCs > 0)
 			write.table(getPCAdata()$scores[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_coordinates_', 
-				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
+				input$n_PCs, '_PCs', '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
 			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_loadings_', 
-				input$n_PCs, '_PCs_', Sys.Date(), '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
+				input$n_PCs, '_PCs', '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
 			})						
 		
 ################################
