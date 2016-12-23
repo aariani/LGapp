@@ -95,7 +95,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 					Otherwise you can upload a comma separated csv file having the genotype ID in the first column'),
 				tags$hr(),
 				h3('Download PCA coordinates and loadings'),
-				numericInput('n_PCs', label=p('Type number of PCs to download'), value = 0),
+				numericInput('n_PCs', label=p('Select number of PCs to download'), value = 0),
 				tags$hr(),
 				actionButton('download_PCA', 'Download PCA data')
 				),
@@ -118,10 +118,10 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			actionButton('analyze_geno', 'Start Population Clustering analysis'),#, 'Please select a file', multiple=F),
 			helpText('You can use the geno file created during the Data Conversion Step'),
 			tags$hr(),
-			h3('Download ancestry coefficient matrix'),
-			textInput('n_K', label=p('Type best number of K')),
+			h3('Download Ancestry Coefficient Matrix'),
+			numericInput('n_K', label=p('Select best number of K'), value = 0),
 			tags$hr(),
-			downloadButton('K_matrix', 'Download')
+			actionButton('K_matrix', 'Download Q Matrix')
 			),
 		mainPanel(
 			tags$head(tags$style(HTML(mycss))),

@@ -1,16 +1,10 @@
 # server.R
-library(shinythemes)
 library(LEA)
 library(dismo)
-#library(rasterVis)
-#library(maptools)
-#library(rgeos)
 library(googleVis)
 library(ChemometricsWithR)
 
-#source('plotData.R') ### script with all the plot data informations look at https://pakillo.github.io/R-GIS-tutorial/#mapping
 source('helper.R')
-
 
 shinyServer(function(input, output){
 	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
@@ -92,12 +86,6 @@ shinyServer(function(input, output){
 		
 ################################
 ### Population Structure #######
-#	shinyFileChoose(input, 'geno', root=c(home=path.expand('~')))
-### get geno file
-#	geno=reactive({parseFilePaths(root=c(home=path.expand('~')), input$geno)})
-### do sNMF analysis
-#	sNMF_analysis = reactiveValues(data = NULL)
-	
 	sNMF_analysis = eventReactive(input$analyze_geno, {
 		setwd(ProjFolder())
 		dir.create('Population_Structure')
@@ -117,7 +105,12 @@ shinyServer(function(input, output){
 		if (input$analyze_geno > 0)
 			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
 		})
-
+	observeEvent(input$K_matrix, {
+		if (input$n_K > 0)
+			Qm = Q(sNMF_analysis(), input$n_K, best_run())
+			colnames(Qm) = paste('Q', 1:input$n_K, sep='')
+			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
+			})
 })
 
 
