@@ -130,7 +130,22 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			id = "loading-spinner"),
 			plotOutput('CEplot', width='100%',height='800px'))
 			)
-		)	
-##############################	
+		),	
+##############################
+#### Selection scan ##########
+	navbarMenu('Selection Scan', icon=icon('cogs'),
+		tabPanel('Population differentiation', icon=icon('arrows-alt'),
+			sidebarPanel(
+				h2('Population differentiation analysis based on Fst statistic'),
+				tags$hr()
+# You will need to specify the Fst function in the helper session.
+# Use load.snmf for loading the project. Then it should plot the inflation factor and the histogram of p values
+# than ou should be able to download the SNP position and the P val, plus the corrected p values
+				)
+		),
+		tabPanel('Association analysis', icon=icon('filter')
+		)
+	)
+### after this keep the parenthesis
 	)
 )
