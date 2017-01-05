@@ -106,9 +106,9 @@ shinyServer(function(input, output){
 			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
 		})
 	observeEvent(input$K_matrix, {
-		if (input$n_K > 0)
+		if (input$n_K > 0) ## i think in this step you will need also the G matrix to download for subsequent steps
 			Qm = Q(sNMF_analysis(), input$n_K, best_run())
-			colnames(Qm) = paste('Q', 1:input$n_K, sep='')
+			colnames(Qm) = paste('Q', 1:input$n_K, sep='') 
 			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
 			})
 })
