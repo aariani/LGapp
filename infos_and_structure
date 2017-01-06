@@ -13,8 +13,9 @@ Here are the Tabs with the Submeno
 	PCA: PCA downloaded data + Loading summary + select most representative variables
 
 4) Population Structure:
-	sNMF: population structure evaluation
-
+	Modify for using TESS3 and export Q barplot and Population interpolation in the maps. Do also a selection scan and plot the manhatthan plot of the result with both Pval and 
+	p-adj
+	
 5) Genome scan:
 	Population differentiation
 	LFMM
@@ -27,3 +28,12 @@ You can add small Icons in the differen analysis by using the icon=icon() functi
 Go to http://fontawesome.io/icons/ for find more icons.
 
 See also this shiny APP created for genome analysis https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4620618/ 
+
+You can use also TESS3 for population structure and spatial interpolation of the data
+See this tutorial: https://bioshock38.github.io/TESS3_encho_sen/articles/main-vignette.html
+
+You can load the lfmm files in this program but remeber to convert the 9 to NA
+
+remeber to revert the Longitude and the latitude in the coordinate matrix for TESS3
+
+Maybe you should implement both LFMM and TESS3 and then in the genomic selection you 

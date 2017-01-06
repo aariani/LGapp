@@ -29,7 +29,6 @@ plotMap=function(coord){
 
 
 #### extract bioclimatic variables
-
 extractBiovar=function(coord, climvar, folder){ ### need also the location of the
 	n=read.csv(coord, sep=',', header=T)
 	pos=n[,c(3,2)]
@@ -42,8 +41,6 @@ extractBiovar=function(coord, climvar, folder){ ### need also the location of th
 	vals
 	}
 
-
-
 getPCA=function(climFile){
 	n=read.table(climFile, sep=',', header=T, row.name=1)
 	pcanalysis=PCA(scale(n))
@@ -55,8 +52,19 @@ getID=function(climFile){
 	rownames(n)
 	}
 
-
-
-	
-
+getTESS_struct = function(genofile, coordfile, k1, k2, ploidy, rep){
+        genotype = as.matrix(read.table(genofile, sep=' '))
+        genotype[genotype == 9] = NA
+	write(coordfile, file='diocane.txt')
+        coordinates = as.matrix(read.table(coordfile, sep = ',', header = T, row.name = 1))
+        coordinates = coordinates[, c(2,1)]
+        pdf('two.pdf')
+	plot(1,1)
+	dev.off()
+	tess3.obj <- tess3(X = genotype, coord = coordinates, K = k1:k2, method = "projected.ls", ploidy = ploidy, rep = rep)
+	pdf('prova.pdf')
+	plot(tess3.obj, pch = 19, col = "blue")
+	dev.off()
+	tess3.obj
+        }
 

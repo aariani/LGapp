@@ -3,6 +3,8 @@ library(LEA)
 library(dismo)
 library(googleVis)
 library(ChemometricsWithR)
+library(tess3r)
+library(maps)
 
 source('helper.R')
 
@@ -17,7 +19,7 @@ shinyServer(function(input, output){
 	getData=reactive({
 		convertData(ProjFolder(), vcf())
 		})
-## Output data	
+# Output data	
 	output$text1= renderPrint({
 		if (!is.null(input$vcf))
 			getData()
@@ -70,7 +72,7 @@ shinyServer(function(input, output){
 		})
 	output$PCAplot=renderPlot({
 		if (!is.null(input$climDat))
-			biplot(getPCAdata(), show.names='loadings',loading.col='black')
+			biplot(getPCAdata(), show.names='loadings',loading.col='blue')
 		})
 	output$PCAsummary=renderPrint({
 		if (!is.null(input$climDat))
@@ -82,31 +84,48 @@ shinyServer(function(input, output){
 				input$n_PCs, '_PCs', '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
 			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_loadings_', 
 				input$n_PCs, '_PCs', '.csv', sep=''), sep=',', col.names=T, quote=F, row.names=T)
+			pdf('Bioclimatic_data/PCA_biplot.pdf')
+			biplot(getPCAdata(), show.names='loadings',loading.col='blue')
+			dev.off()
 			})						
 		
 ################################
 ### Population Structure #######
-	sNMF_analysis = eventReactive(input$analyze_geno, {
+#	sNMF_analysis = eventReactive(input$analyze_geno, {
+#		setwd(ProjFolder())
+#		dir.create('Population_Structure')
+#		setwd('Population_Structure')
+#		fname = list.files('../Data_conversion', pattern = 'geno', full.names = T)
+#		file.copy(fname, '.')
+#		snmf(list.files('.', pattern ='geno'), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
+#		})
+	TESS_analysis = eventReactive(input$analyze_geno, {
 		setwd(ProjFolder())
 		dir.create('Population_Structure')
 		setwd('Population_Structure')
-		fname = list.files('../Data_conversion', pattern = 'geno', full.names = T)
-		file.copy(fname, '.')
-		snmf(list.files('.', pattern ='geno'), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
+		fname = list.files('../Data_conversion', pattern = 'lfmm', full.names = T)
+#		file.copy(fname, '.')
+		coordFile2=input$coord2
+		getTESS_struct(fname, coordFile2$datapath, input$K_range[1], input$K_range[2], input$ploidy, input$rep)
 		})
+
 ### get best run
-	best_run=reactive({
-		ce=cross.entropy(sNMF_analysis(), K=input$n_K)
-		best=which.min(ce)
-		best
-		})
+#	best_run=reactive({
+#		ce=cross.entropy(sNMF_analysis(), K=input$n_K)
+#		best=which.min(ce)
+#		best
+#		})
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
 		if (input$analyze_geno > 0)
-			plot(sNMF_analysis(), lwd = 5, col = "red", pch=1)
+			TESS_analysis()
+#			plot(TESS_analysis(), lwd = 5, col = "red")#, pch=1, xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 		})
 	observeEvent(input$K_matrix, {
-		if (input$n_K > 0) ## i think in this step you will need also the G matrix to download for subsequent steps
+		if (input$n_K > 0)
+# Extract Q matrix and print it
+# Plot barplot
+# plot MAP
 			Qm = Q(sNMF_analysis(), input$n_K, best_run())
 			colnames(Qm) = paste('Q', 1:input$n_K, sep='') 
 			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
