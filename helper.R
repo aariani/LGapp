@@ -52,19 +52,31 @@ getID=function(climFile){
 	rownames(n)
 	}
 
-getTESS_struct = function(genofile, coordfile, k1, k2, ploidy, rep){
+getTESS_struct = function(genofile, coordfile, k, ploidy, rep){
         genotype = as.matrix(read.table(genofile, sep=' '))
         genotype[genotype == 9] = NA
-	write(coordfile, file='diocane.txt')
         coordinates = as.matrix(read.table(coordfile, sep = ',', header = T, row.name = 1))
         coordinates = coordinates[, c(2,1)]
-        pdf('two.pdf')
-	plot(1,1)
-	dev.off()
-	tess3.obj <- tess3(X = genotype, coord = coordinates, K = k1:k2, method = "projected.ls", ploidy = ploidy, rep = rep)
-	pdf('prova.pdf')
-	plot(tess3.obj, pch = 19, col = "blue")
+	tess3.obj <- tess3(X = genotype, coord = coordinates, K = 1:k, method = "projected.ls", ploidy = ploidy, rep = rep)
+	pdf('Cross-Entropy_profile_by_Number_of_K.pdf')
+	plot(tess3.obj, pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 	dev.off()
 	tess3.obj
         }
+
+exportTESS = function(tess_obj, k, coordfile){
+	coordinates = as.matrix(read.table(coordfile, sep = ',', header = T, row.name = 1))
+	coordinates = coordinates[, c(2,1)]
+	q.matrix <- qmatrix(tess_obj, K = k)
+	Qm=q.matrix
+	colnames(Qm) = paste('Q', 1:k, sep='')
+	write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
+	my.colors = rainbow(ncol(q.matrix))
+	my.palette <- CreatePalette(my.colors, 9)
+	pdf('TESS3_pop_struct_summary.pdf')
+	barplot(q.matrix, border = NA, space = 0, main = "Ancestry matrix", xlab = "Individuals", 
+		ylab = "Ancestry proportions", col.palette = my.palette) -> bp
+	plot(q.matrix, coordinates, method = "map.max", interpol = FieldsKrigModel(10), main = "Ancestry coefficients", 
+		xlab = "Longitude", ylab = "Latitude", resolution = c(300,300), cex = .4, col.palette = my.palette)
+	}
 

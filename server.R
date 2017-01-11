@@ -91,37 +91,22 @@ shinyServer(function(input, output){
 		
 ################################
 ### Population Structure #######
-#	sNMF_analysis = eventReactive(input$analyze_geno, {
-#		setwd(ProjFolder())
-#		dir.create('Population_Structure')
-#		setwd('Population_Structure')
-#		fname = list.files('../Data_conversion', pattern = 'geno', full.names = T)
-#		file.copy(fname, '.')
-#		snmf(list.files('.', pattern ='geno'), K=input$K_range[1]:input$K_range[2], entropy=T, rep=input$rep, project='new')
-#		})
 	TESS_analysis = eventReactive(input$analyze_geno, {
 		setwd(ProjFolder())
 		dir.create('Population_Structure')
 		setwd('Population_Structure')
 		fname = list.files('../Data_conversion', pattern = 'lfmm', full.names = T)
-#		file.copy(fname, '.')
 		coordFile2=input$coord2
-		getTESS_struct(fname, coordFile2$datapath, input$K_range[1], input$K_range[2], input$ploidy, input$rep)
+		getTESS_struct(fname, coordFile2$datapath, input$K, input$ploidy, input$rep)
 		})
 
-### get best run
-#	best_run=reactive({
-#		ce=cross.entropy(sNMF_analysis(), K=input$n_K)
-#		best=which.min(ce)
-#		best
-#		})
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
 		if (input$analyze_geno > 0)
-			TESS_analysis()
-#			plot(TESS_analysis(), lwd = 5, col = "red")#, pch=1, xlab = "Number of ancestral populations", ylab = "Cross-validation score")
+			plot(TESS_analysis(), pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 		})
-	observeEvent(input$K_matrix, {
+
+	observeEvent(input$res, {
 		if (input$n_K > 0)
 # Extract Q matrix and print it
 # Plot barplot
