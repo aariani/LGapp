@@ -111,9 +111,11 @@ shinyServer(function(input, output){
 # Extract Q matrix and print it
 # Plot barplot
 # plot MAP
-			Qm = Q(sNMF_analysis(), input$n_K, best_run())
-			colnames(Qm) = paste('Q', 1:input$n_K, sep='') 
-			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
+#			Qm = Q(sNMF_analysis(), input$n_K, best_run())
+#			colnames(Qm) = paste('Q', 1:input$n_K, sep='') 
+#			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
+			coordFile2=input$coord2
+			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
 			})
 })
 
