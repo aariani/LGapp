@@ -9,8 +9,6 @@ convertData =  function(pf, vcf){ # project folder, vcf file
 		setwd('Data_conversion')
 		file.copy(as.character(vcf[1,4]), '.')
 		vcf2lfmm(as.character(vcf[1,1]))
-		SNP_pos=read.table(as.character(vcf[1,1]), sep='\t')
-		write.table(SNP_pos[,1:2], file='SNPs_positions.txt', sep='\t', row.name=F, col.name=F, quote=F)
 		}
 
 ########################################
@@ -70,10 +68,10 @@ exportTESS = function(tess_obj, k, coordfile){
 	q.matrix <- qmatrix(tess_obj, K = k)
 	Qm=q.matrix
 	colnames(Qm) = paste('Q', 1:k, sep='')
-	write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
+	write.table(Qm, paste('Qmatrix_K', k, '.csv' sep=''), sep=',', row.names=F, col.names=T, quote=F)
 	my.colors = rainbow(ncol(q.matrix))
 	my.palette <- CreatePalette(my.colors, 9)
-	pdf('TESS3_pop_struct_summary.pdf')
+	pdf(paste('TESS3_pop_struct_summary_K', k, '.pdf', sep='\t'))
 	barplot(q.matrix, border = NA, space = 0, main = "Ancestry matrix", xlab = "Individuals", 
 		ylab = "Ancestry proportions", col.palette = my.palette) -> bp
 	plot(q.matrix, coordinates, method = "map.max", interpol = FieldsKrigModel(10), main = "Ancestry coefficients", 
