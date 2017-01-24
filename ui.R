@@ -122,7 +122,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			actionButton('analyze_geno', 'Start Population Clustering analysis'),#, 'Please select a file', multiple=F),
 			helpText('This step will analyze the genotype file created during the Data Conversion Step'),
 			tags$hr(),
-			numericInput('n_K', label=p('Select best number of K'), value = 0, min = 0),
+			numericInput('n_K', label='Select best number of K', value = 0, min = 0),
 			tags$hr(),
 			actionButton('res', 'Download Results')
 			),
@@ -140,7 +140,14 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 		tabPanel('Population differentiation', icon=icon('arrows-alt'),
 			sidebarPanel(
 				h2('Population differentiation analysis based on Fst statistic'),
-				tags$hr()
+				tags$hr(),
+				sliderInput('bestK', label='Select number of K for the analysis', value=2, min=0, max=20),
+				tags$hr(),
+				selectInput('padj', label='Select P values correction method', c('None' = 'none', 
+					'Bonferroni'='bonferroni', 'Holm'='holm', 'Hochberg'='hochberg', 'Hommel'='hommel', 
+					'Benjamini & Hochberg'='BH', 'Benjamini & Yekutieli'='BY', 'FDR'='fdr')),
+				tags$hr(),
+				actionButton('popdiff', 'Export Results')
 # You will need to specify the Fst function in the helper session.
 # Use load.snmf for loading the project. Then it should plot the inflation factor and the histogram of p values
 # than ou should be able to download the SNP position and the P val, plus the corrected p values
