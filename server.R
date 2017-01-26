@@ -12,6 +12,10 @@ shinyServer(function(input, output){
 	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 	ProjFolder=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # THIS IS THE MAIN PROJECT FOLDER
+#	setwd(ProjFolder)
+#	s=list.files(pattern='RData')
+#	if (length(s)==1)
+#		load(s)
 #########################################
 #### Conversion Tab START ###############
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)}) # get VCF file
@@ -103,20 +107,22 @@ shinyServer(function(input, output){
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
 		if (input$analyze_geno > 0)
+#			save.image('../log_infos.RData')
 			plot(TESS_analysis(), pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 		})
 
 	observeEvent(input$res, {
 		if (input$n_K > 0)
-# Extract Q matrix and print it
-# Plot barplot
-# plot MAP
-#			Qm = Q(sNMF_analysis(), input$n_K, best_run())
-#			colnames(Qm) = paste('Q', 1:input$n_K, sep='') 
-#			write.table(Qm, 'Qmatrix.csv', sep=',', row.names=F, col.names=T, quote=F)
 			coordFile2=input$coord2
+			save.image('../log_infos.RData')
 			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
 			})
+
+###############################
+	popdiff_analysis= eventReactive(input$popdiff_analysis, {
+		setwd(ProjFolder())
+		load('log_infos.RData')
+		})
 })
 
 

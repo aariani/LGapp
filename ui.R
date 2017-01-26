@@ -141,13 +141,15 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			sidebarPanel(
 				h2('Population differentiation analysis based on Fst statistic'),
 				tags$hr(),
-				sliderInput('bestK', label='Select number of K for the analysis', value=2, min=0, max=20),
+				sliderInput('Kfst', label='Select number of K for the analysis', value=2, min=0, max=20),
 				tags$hr(),
 				selectInput('padj', label='Select P values correction method', c('None' = 'none', 
 					'Bonferroni'='bonferroni', 'Holm'='holm', 'Hochberg'='hochberg', 'Hommel'='hommel', 
 					'Benjamini & Hochberg'='BH', 'Benjamini & Yekutieli'='BY', 'FDR'='fdr')),
 				tags$hr(),
-				actionButton('popdiff', 'Export Results')
+				actionButton('popdiff_analysis', 'Start Analysis'),
+				tags$hr(),
+				actionButton('popdiffres', 'Export Results')
 # You will need to specify the Fst function in the helper session.
 # Use load.snmf for loading the project. Then it should plot the inflation factor and the histogram of p values
 # than ou should be able to download the SNP position and the P val, plus the corrected p values

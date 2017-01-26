@@ -36,4 +36,5 @@ You can load the lfmm files in this program but remeber to convert the 9 to NA
 
 remeber to revert the Longitude and the latitude in the coordinate matrix for TESS3
 
-Maybe you should implement both LFMM and TESS3 and then in the genomic selection you 
+
+You should create an RData file everytime you perform a time consuming analysis like the TESS3 by using save.image('log.RData')

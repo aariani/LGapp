@@ -59,6 +59,7 @@ getTESS_struct = function(genofile, coordfile, k, ploidy, rep){
 	pdf('Cross-Entropy_profile_by_Number_of_K.pdf')
 	plot(tess3.obj, pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 	dev.off()
+#	save.image('../log_infos.RData')
 	tess3.obj
         }
 
