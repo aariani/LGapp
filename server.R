@@ -114,14 +114,14 @@ shinyServer(function(input, output){
 	observeEvent(input$res, {
 		if (input$n_K > 0)
 			coordFile2=input$coord2
-			save.image('../log_infos.RData')
+			#save.image('../log_infos.RData')
 			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
 			})
 
 ###############################
 	popdiff_analysis= eventReactive(input$popdiff_analysis, {
 		setwd(ProjFolder())
-		load('log_infos.RData')
+		#load('log_infos.RData')
 		})
 })
 
