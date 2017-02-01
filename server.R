@@ -34,10 +34,10 @@ shinyServer(function(input, output){
 		paste('Selected', ProjFolder(), 'as Project Folder')
 		})
 
-########################################
-#### Climatic Data Start ###############
-#############################
-#### Download ###############
+################################
+#### Climatic Data Start #######
+################################
+#### Download ##################
 ## you can use renderGvis for rendering an html data type with the coordinates
 ## but you need to create a function in the main body of the server.R
 	shinyDirChoose(input, 'climdir', root=c(home=path.expand('~'))) ## set up directory
@@ -118,11 +118,25 @@ shinyServer(function(input, output){
 			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
 			})
 
-###############################
-	popdiff_analysis= eventReactive(input$popdiff_analysis, {
+##################################
+#### Selection scan analysis######
+##################################
+#### Population differentiation ##
+	Fst = eventReactive(input$fst_analysis, {
 		setwd(ProjFolder())
-		#load('log_infos.RData')
+		tess3struct = readRDS('tess3.rds')
+		p.values = pvalue(tess3struct, K = input$Kfst)
+		p.values
 		})
+
+	output$fst_pvals = renderPlot({
+		hist(Fst(), col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
+		})
+	
+	output$fst_manhattan = renderPlot({
+		plot(Fst())
+		})
+
 })
 
 

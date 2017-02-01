@@ -36,5 +36,4 @@ You can load the lfmm files in this program but remeber to convert the 9 to NA
 
 remeber to revert the Longitude and the latitude in the coordinate matrix for TESS3
 
-
-You should create an RData file everytime you perform a time consuming analysis like the TESS3 by using save.image('log.RData')
+Create an rds file in the previous analysis and then load it later
