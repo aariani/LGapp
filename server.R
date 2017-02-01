@@ -5,6 +5,7 @@ library(googleVis)
 library(ChemometricsWithR)
 library(tess3r)
 library(maps)
+library(qqman)
 
 source('helper.R')
 
@@ -107,7 +108,6 @@ shinyServer(function(input, output){
 ### plot CE for choosing best K
 	output$CEplot=renderPlot({
 		if (input$analyze_geno > 0)
-#			save.image('../log_infos.RData')
 			plot(TESS_analysis(), pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
 		})
 
@@ -125,6 +125,8 @@ shinyServer(function(input, output){
 	Fst = eventReactive(input$fst_analysis, {
 		setwd(ProjFolder())
 		tess3struct = readRDS('tess3.rds')
+		dir.create('Population_differentiation')
+		setwd('Population_differentiation')
 		p.values = pvalue(tess3struct, K = input$Kfst)
 		p.values
 		})
@@ -134,7 +136,9 @@ shinyServer(function(input, output){
 		})
 	
 	output$fst_manhattan = renderPlot({
-		plot(Fst())
+		if (input$fst_analysis > 0)	
+			dat = createqqmanDF(Fst())
+			manhattan(dat)
 		})
 
 })

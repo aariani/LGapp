@@ -80,3 +80,13 @@ exportTESS = function(tess_obj, k, coordfile){
 	dev.off()
 	}
 
+createqqmanDF = function(fst_data) {
+	p_file = list.files('../Data_conversion', pattern = 'vcfsnp', full.names=T)
+	markerPos = read.table(p_file, sep=' ')
+	final_dat = cbind(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, fst_data)
+	colnames(final_dat) = c('SNP', 'CHR', 'BP', 'P')
+	final_dat
+	}
+
+
+
