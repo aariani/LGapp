@@ -136,9 +136,9 @@ shinyServer(function(input, output){
 		})
 	
 	output$fst_manhattan = renderPlot({
-		if (input$fst_analysis > 0)	
-			dat = createqqmanDF(Fst())
-			manhattan(dat)
+#		if (input$fst_analysis > 0)	
+#			dat = createqqmanDF(Fst())
+#			manhattan(dat)
 		})
 
 })

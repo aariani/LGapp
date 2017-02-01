@@ -70,7 +70,7 @@ exportTESS = function(tess_obj, k, coordfile){
 	Qm=q.matrix
 	colnames(Qm) = paste('Q', 1:k, sep='')
 	write.table(Qm, paste('Qmatrix_K', k, '.csv', sep=''), sep=',', row.names=F, col.names=T, quote=F)
-	my.colors = rainbow(ncol(q.matrix))
+	my.colors = heat.colors(ncol(q.matrix))
 	my.palette <- CreatePalette(my.colors, 9)
 	pdf(paste('TESS3_pop_struct_summary_K', k, '.pdf', sep=''))
 	barplot(q.matrix, border = NA, space = 0, main = "Ancestry matrix", xlab = "Individuals", 
