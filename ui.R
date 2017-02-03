@@ -156,7 +156,25 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				plotOutput('fst_manhattan')
 				)
 		),
-		tabPanel('Association analysis', icon=icon('filter')
+		tabPanel('Association analysis', icon=icon('filter'),
+			sidebarPanel(
+				h2('Association analysis with LFMM'),
+				tags$hr(),
+				h3('Convert Phenotype file'),
+				fileInput('pheno_all', 'Select phenotype file', accept='.csv'),
+				actionButton('writeEnv', 'Convert Files'),
+				helpText('This step convert the Phenotype file in single variable files'),
+				tags$hr(),
+				fileInput('pheno', 'Select Variable file', accept = '.env'),
+				helpText('Select one the variable file converted in the previous step'),
+				#tags$hr(),
+				sliderInput('LF', label='Select number of K for the association analysis', value=2, min=0, max=20),
+				sliderInput('rep_lfmm', label='Select number of repetition for each K', min=1, max=100, value=10),
+				checkboxInput('miss', 'Missing data', value = F),
+				tags$hr(),
+				actionButton('lfmm_analysis', 'Run association analysis')
+				
+		)	
 		)
 	)
 ### after this keep the parenthesis
