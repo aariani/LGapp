@@ -125,8 +125,6 @@ shinyServer(function(input, output){
 	Fst = eventReactive(input$fst_analysis, {
 		setwd(ProjFolder())
 		tess3struct = readRDS('tess3.rds')
-#		dir.create('Population_differentiation')
-#		setwd('Population_differentiation')
 		p.values = pvalue(tess3struct, K = input$Kfst)
 		dat=createqqmanDF(p.values)
 		dat
@@ -146,6 +144,18 @@ shinyServer(function(input, output){
 		setwd('Population_differentiation')
 		exportFst(Fst(), input$Kfst, input$padj)
 		})
+
+###################################
+#### Association analysis #########
+	observeEvent(input$writeEnv, {
+		setwd(ProjFolder())
+		phenofile = input$pheno_all
+		dir.create('Association_analysis')
+		setwd('Association_analysis')
+		createEnv(phenofile$datapath)
+		})
+
+	
 
 })
 

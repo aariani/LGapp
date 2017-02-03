@@ -98,4 +98,13 @@ exportFst = function(dat, k, padj){
 	write.table(dat, paste('Fst_result_table_', k, '_', padj, '.csv', sep=''), col.name=T, row.name=F, quote=F)
 	}
 	
+createEnv = function(filein){
+	allVar = read.table(filein, sep=',', header=T, row.name=1)
+	for (i in 1:ncol(allVar)){
+		singleVar=allVar[,i]
+		envFileName=paste(colnames(allVar)[i], 'env', sep='.')
+		write.env(singleVar, envFileName)
+		}
+	}
+
 
