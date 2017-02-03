@@ -125,20 +125,26 @@ shinyServer(function(input, output){
 	Fst = eventReactive(input$fst_analysis, {
 		setwd(ProjFolder())
 		tess3struct = readRDS('tess3.rds')
-		dir.create('Population_differentiation')
-		setwd('Population_differentiation')
+#		dir.create('Population_differentiation')
+#		setwd('Population_differentiation')
 		p.values = pvalue(tess3struct, K = input$Kfst)
-		p.values
+		dat=createqqmanDF(p.values)
+		dat
 		})
 
 	output$fst_pvals = renderPlot({
-		hist(Fst(), col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
+		hist(Fst()[,4], col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
+#		plot(1,1)
 		})
-	
+
 	output$fst_manhattan = renderPlot({
-#		if (input$fst_analysis > 0)	
-#			dat = createqqmanDF(Fst())
-#			manhattan(dat)
+			manhattan(Fst(), ylim=c(0, -log10(min(Fst()[,4])) + 0.5))
+		})
+
+	observeEvent(input$fst_res, {
+		dir.create('Population_differentiation')
+		setwd('Population_differentiation')
+		exportFst(Fst(), input$Kfst, input$padj)
 		})
 
 })

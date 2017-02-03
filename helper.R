@@ -81,12 +81,21 @@ exportTESS = function(tess_obj, k, coordfile){
 	}
 
 createqqmanDF = function(fst_data) {
-	p_file = list.files('../Data_conversion', pattern = 'vcfsnp', full.names=T)
+	p_file = list.files('Data_conversion', pattern = 'vcfsnp', full.names=T)
 	markerPos = read.table(p_file, sep=' ')
-	final_dat = cbind(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, fst_data)
+	final_dat = cbind.data.frame(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, fst_data)
 	colnames(final_dat) = c('SNP', 'CHR', 'BP', 'P')
 	final_dat
 	}
 
-
+exportFst = function(dat, k, padj){
+	pdf(paste('Fst_results_plot_', k, '.pdf', sep=''), height=3.5, width=7)
+	hist(dat$P, col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
+	manhattan(dat, ylim=c(0, -log10(min(dat$P)) + 0.5))
+	dev.off()
+	dat = cbind.data.frame(dat, p.adjust(dat$P, method=padj))
+	colnames(dat)[5]='Padj'
+	write.table(dat, paste('Fst_result_table_', k, '_', padj, '.csv', sep=''), col.name=T, row.name=F, quote=F)
+	}
+	
 
