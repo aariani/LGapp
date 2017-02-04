@@ -6,6 +6,7 @@ library(ChemometricsWithR)
 library(tess3r)
 library(maps)
 library(qqman)
+library(gplots)
 
 source('helper.R')
 
@@ -13,10 +14,6 @@ shinyServer(function(input, output){
 	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 	ProjFolder=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # THIS IS THE MAIN PROJECT FOLDER
-#	setwd(ProjFolder)
-#	s=list.files(pattern='RData')
-#	if (length(s)==1)
-#		load(s)
 #########################################
 #### Conversion Tab START ###############
 	vcf=reactive({parseFilePaths(c(home=path.expand('~')), input$vcf)}) # get VCF file

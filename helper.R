@@ -70,7 +70,7 @@ exportTESS = function(tess_obj, k, coordfile){
 	Qm=q.matrix
 	colnames(Qm) = paste('Q', 1:k, sep='')
 	write.table(Qm, paste('Qmatrix_K', k, '.csv', sep=''), sep=',', row.names=F, col.names=T, quote=F)
-	my.colors = heat.colors(ncol(q.matrix))
+	my.colors = colorpanel(ncol(q.matrix), 'red', 'green', 'blue')
 	my.palette <- CreatePalette(my.colors, 9)
 	pdf(paste('TESS3_pop_struct_summary_K', k, '.pdf', sep=''))
 	barplot(q.matrix, border = NA, space = 0, main = "Ancestry matrix", xlab = "Individuals", 
@@ -95,7 +95,7 @@ exportFst = function(dat, k, padj){
 	dev.off()
 	dat = cbind.data.frame(dat, p.adjust(dat$P, method=padj))
 	colnames(dat)[5]='Padj'
-	write.table(dat, paste('Fst_result_table_', k, '_', padj, '.csv', sep=''), col.name=T, row.name=F, quote=F)
+	write.table(dat, paste('Fst_result_table_', k, '_', padj, '.csv', sep=''), sep=',',  col.name=T, row.name=F, quote=F)
 	}
 	
 createEnv = function(filein){
