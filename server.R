@@ -123,8 +123,7 @@ shinyServer(function(input, output){
 		setwd(ProjFolder())
 		tess3struct = readRDS('tess3.rds')
 		p.values = pvalue(tess3struct, K = input$Kfst)
-		dat=createqqmanDF(p.values)
-		dat
+		createqqmanDF(p.values)
 		})
 
 	output$fst_pvals = renderPlot({
@@ -151,12 +150,20 @@ shinyServer(function(input, output){
 		setwd('Association_analysis')
 		createEnv(phenofile$datapath)
 		})
+### LFMM analysis
+	LFMM_analysis = eventReactive(input$lfmm_analysis, {
+		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
+		envFile = input$pheno
+		run_LFMM(envFile$name, input$LF, input$rep_lfmm, input$miss)
+		})
 
-	
+	output$lfmm_pvals=renderPlot({
+		if (input$lfmm_analysis > 0)
+			hist(LFMM_analysis()[[1]][,4], col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
+		})
+
+#	output$lfmm_manhatthan=renderPlot({
+#		manhattan(LFMM_analysis()[[1]], ylim=c(0, -log10(min(LFMM_analysis[,4])) + 0.5))
+#		})
 
 })
-
-
-
-
-

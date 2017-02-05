@@ -72,7 +72,8 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				),
 			tags$hr(),
 			fileInput('coord', 'Select file with coordinates', accept='.csv'),
-			helpText('The conversion requires a comma separated csv file with 3 columns. The First colum should contains the Genotype ID, the second the Latitude and the third the Longitude'),
+			helpText('The conversion requires a comma separated csv file with 3 columns. 
+				The First colum should contains the Genotype ID, the second the Latitude and the third the Longitude'),
 			tags$hr(),
 			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
 			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/current')),
@@ -172,11 +173,20 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				sliderInput('rep_lfmm', label='Select number of repetition for each K', min=1, max=100, value=10),
 				checkboxInput('miss', 'Missing data', value = F),
 				tags$hr(),
-				actionButton('lfmm_analysis', 'Run association analysis')
-				
-		)	
-		)
-	)
+				actionButton('lfmm_analysis', 'Run association analysis'),
+				tags$hr(),
+				actionButton('lfmm_res', 'Export Results')
+				),
+			mainPanel(
+				tags$head(tags$style(HTML(mycss))),
+				div(id = "plot-container",
+				tags$img(src = "spinner.gif",
+				id = "loading-spinner"),
+				plotOutput('lfmm_pvals'))#,
+		#		plotOutput('lfmm_manhatthan'))#, width='100%',height='800px'))
+				)
+			)
+		)		
 ### after this keep the parenthesis
 	)
 )

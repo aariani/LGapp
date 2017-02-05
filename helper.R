@@ -80,10 +80,10 @@ exportTESS = function(tess_obj, k, coordfile){
 	dev.off()
 	}
 
-createqqmanDF = function(fst_data) {
+createqqmanDF = function(pval_data){
 	p_file = list.files('Data_conversion', pattern = 'vcfsnp', full.names=T)
 	markerPos = read.table(p_file, sep=' ')
-	final_dat = cbind.data.frame(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, fst_data)
+	final_dat = cbind.data.frame(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, pval_data)
 	colnames(final_dat) = c('SNP', 'CHR', 'BP', 'P')
 	final_dat
 	}
@@ -105,6 +105,23 @@ createEnv = function(filein){
 		envFileName=paste(colnames(allVar)[i], 'env', sep='.')
 		write.env(singleVar, envFileName)
 		}
+	}
+
+run_LFMM = function(envFile, k, rep, miss) {
+# this function should return the matrix for manhatthan plot		
+	lfmm_file = list.files('../Data_conversion', pattern = 'lfmm')
+	file.copy(paste('../Data_conversion/', lfmm_file, sep=''), '.')
+	obj.lfmm = lfmm(lfmm_file, envFile, K=k, missing.data=miss, repetitions=rep, project='new')
+	zs = z.scores(obj.lfmm, K=k)
+	zs.median = apply(zs, MARGIN = 1, median)
+	lambda = median(zs.median^2)/qchisq(0.5, df = 1)
+	adj.p.values = pchisq(zs.median^2/lambda, df = 1, lower = FALSE)
+#	assoc_res = createqqmanDF(adj.p.values)
+	p_file = list.files('../Data_conversion', pattern = 'vcfsnp', full.names=T)
+        markerPos = read.table(p_file, sep=' ')
+        assoc_res = cbind.data.frame(paste(markerPos$V1, markerPos$V2, sep='_'), as.numeric(markerPos$V1), markerPos$V2, adj.p.values)
+	final_res = list(assoc_res, lambda)
+	final_res		
 	}
 
 
