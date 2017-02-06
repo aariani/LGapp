@@ -175,6 +175,9 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				tags$hr(),
 				actionButton('lfmm_analysis', 'Run association analysis'),
 				tags$hr(),
+				selectInput('padj', label='Select P values correction method', c('None' = 'none', 
+					'Bonferroni'='bonferroni', 'Holm'='holm', 'Hochberg'='hochberg', 'Hommel'='hommel',
+					'Benjamini & Hochberg'='BH', 'Benjamini & Yekutieli'='BY', 'FDR'='fdr')),
 				actionButton('lfmm_res', 'Export Results')
 				),
 			mainPanel(
@@ -182,8 +185,8 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				div(id = "plot-container",
 				tags$img(src = "spinner.gif",
 				id = "loading-spinner"),
-				plotOutput('lfmm_pvals'))#,
-		#		plotOutput('lfmm_manhatthan'))#, width='100%',height='800px'))
+				plotOutput('lfmm_pvals')),
+				plotOutput('lfmm_manhatthan')
 				)
 			)
 		)		

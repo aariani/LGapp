@@ -162,8 +162,13 @@ shinyServer(function(input, output){
 			hist(LFMM_analysis()[[1]][,4], col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
 		})
 
-#	output$lfmm_manhatthan=renderPlot({
-#		manhattan(LFMM_analysis()[[1]], ylim=c(0, -log10(min(LFMM_analysis[,4])) + 0.5))
-#		})
+	output$lfmm_manhatthan=renderPlot({
+		manhattan(LFMM_analysis()[[1]], ylim=c(0, -log10(min(LFMM_analysis()[[1]][,4])) + 0.5))
+		})
+
+	observeEvent(input$lfmm_res, {
+		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
+		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj)		
+		})
 
 })
