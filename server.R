@@ -168,7 +168,8 @@ shinyServer(function(input, output){
 
 	observeEvent(input$lfmm_res, {
 		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
-		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj)		
+		envFile = input$pheno
+		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj, envFile$name)		
 		})
 
 })

@@ -125,12 +125,13 @@ run_LFMM = function(envFile, k, rep, miss) {
 	final_res
 	}
 
-exportLFMM = function(res_df, k, padj){
-	pdf(paste('Association_results_K', k, '.pdf', sep=''), height=3.5, width=7)
+exportLFMM = function(res_df, k, padj, phenoFile){
+	suffix = strsplit(phenoFile, '.env')[[1]]
+	pdf(paste('Association_results_K', k, '_', suffix, '.pdf', sep=''), height=3.5, width=7)
 	hist(res_df$P, col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
 	manhattan(res_df, ylim=c(0, -log10(min(res_df$P)) + 0.5))
 	dev.off()
 	res_final = cbind.data.frame(res_df, p.adjust(res_df$P, method = padj))
 	colnames(res_final)[5] = 'Padj'
-	write.table(res_final, paste('Association_results_table_K', k, '.csv', sep=''), sep=',', col.name=T, row.name=F, quote=F)
+	write.table(res_final, paste('Association_results_table_K', k,'_', suffix, '.csv', sep=''), sep=',', col.name=T, row.name=F, quote=F)
 	}
