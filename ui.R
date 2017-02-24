@@ -189,6 +189,11 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				plotOutput('lfmm_manhatthan')
 				)
 			)
+		),
+	tabPanel('SNPs annotation', icon=icon('puzzle-piece'),
+		sidebarPanel(
+			h2('Identification of genes nearby significant SNPs')
+			)
 		)		
 ### after this keep the parenthesis
 	)
