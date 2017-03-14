@@ -55,6 +55,7 @@ getTESS_struct = function(genofile, coordfile, k, ploidy, rep){
         genotype[genotype == 9] = NA
         coordinates = as.matrix(read.table(coordfile, sep = ',', header = T, row.name = 1))
         coordinates = coordinates[, c(2,1)]
+	set.seed(101)
 	tess3.obj <- tess3(X = genotype, coord = coordinates, K = 1:k, method = "projected.ls", ploidy = ploidy, rep = rep)
 	pdf('Cross-Entropy_profile_by_Number_of_K.pdf')
 	plot(tess3.obj, pch = 19, col = "blue", xlab = "Number of ancestral populations", ylab = "Cross-validation score")
