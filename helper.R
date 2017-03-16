@@ -75,7 +75,7 @@ exportTESS = function(tess_obj, k, coordfile){
 	my.palette <- CreatePalette(my.colors, 9)
 	pdf(paste('TESS3_pop_struct_summary_K', k, '.pdf', sep=''))
 	barplot(q.matrix, border = NA, space = 0, main = "Ancestry matrix", xlab = "Individuals", 
-		ylab = "Ancestry proportions", col.palette = rev(my.palette)) -> bp
+		ylab = "Ancestry proportions", col.palette = my.palette) -> bp
 	plot(q.matrix, coordinates, method = "map.max", interpol = FieldsKrigModel(10), main = "Ancestry coefficients", 
 		xlab = "Longitude", ylab = "Latitude", resolution = c(600,600), cex = .4, col.palette = my.palette)
 	dev.off()
