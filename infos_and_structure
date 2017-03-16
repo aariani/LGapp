@@ -43,3 +43,5 @@ The tess3r reverse the colors in the barplot and in the graphical map. I used re
 R package
 
 easyLG_app: an R package for landscape genomic analysis within the Shiny web application framework 
+
+For windows you need to install Rtools and kohonen package
