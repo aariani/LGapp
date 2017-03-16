@@ -111,7 +111,6 @@ shinyServer(function(input, output){
 	observeEvent(input$res, {
 		if (input$n_K > 0)
 			coordFile2=input$coord2
-			#save.image('../log_infos.RData')
 			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
 			})
 

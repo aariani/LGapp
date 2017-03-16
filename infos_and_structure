@@ -37,3 +37,9 @@ You can load the lfmm files in this program but remeber to convert the 9 to NA
 remeber to revert the Longitude and the latitude in the coordinate matrix for TESS3
 
 Create an rds file in the previous analysis and then load it later
+
+The tess3r reverse the colors in the barplot and in the graphical map. I used rev(my.palette) in the file
+
+R package
+
+easyLG_app: an R package for landscape genomic analysis within the Shiny web application framework 
