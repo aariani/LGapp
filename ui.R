@@ -194,7 +194,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 		sidebarPanel(
 			h2('SNPs annotation'),
 			tags$hr(),
-			fileInput('annot', 'Select annoation file in GFF3 format', accept='.gff3'),
+			shinyFilesButton('annot', 'Select GFF3 annotation file', 'Select GFF', multiple=F),
 			tags$hr(),
 			fileInput('assoc_res', 'Select Association results file', accept='.csv'),
 			helpText('Select the output of either the population differentiation analysis
@@ -204,7 +204,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			helpText('Select the maximum distance between a significant SNPs and the nearest gene'),
 			tags$hr(),
 			sliderInput('pval_max', 'Select P values threshold', min=0, max=1, value = 0.05, step = 0.01),
-			checkboxInput('padj_type', 'Adjusted P values', value = F)	
+			checkboxInput('padj_type', 'Adjusted P values', value = T)	
 			)
 		)		
 ### after this keep the parenthesis

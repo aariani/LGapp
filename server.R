@@ -7,6 +7,8 @@ library(tess3r)
 library(maps)
 library(qqman)
 library(gplots)
+library(GenomicRanges)
+library(rtracklayer)
 
 source('helper.R')
 
@@ -169,6 +171,23 @@ shinyServer(function(input, output){
 		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
 		envFile = input$pheno
 		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj, envFile$name)		
+		})
+
+
+###################################
+#### SNPs Annotation ##############
+	shinyFileChoose(input, 'annot',  root=c(home=path.expand('~')))
+	GFF3_genes=reactive({
+		f=parseFilePaths(c(home=path.expand('~')), input$annot)
+		f=import.gff3(f[1,4])
+		genes=subset(f, f$type == 'gene') 
+		genes
+		})
+
+	SNPs=reactive({
+		setwd(ProjFolder())
+		sign_file = input$assoc_res
+		get_SNPs_Ranges(sign_file$datapath, input$padj_type)
 		})
 
 })
