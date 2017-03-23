@@ -45,3 +45,5 @@ R package
 easyLG_app: an R package for landscape genomic analysis within the Shiny web application framework 
 
 For windows you need to install Rtools and kohonen package
+
+Why don't you just export a nice table with the gene IDs and the distance from SNPs, with significance of the SNPs??
