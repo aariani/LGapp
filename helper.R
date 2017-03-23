@@ -139,7 +139,7 @@ exportLFMM = function(res_df, k, padj, phenoFile){
 
 get_SNPs_Ranges=function(assoc_file, padj){
 	pType = 'P'
-	pos_file = list.files('../Data_conversion', pattern='vcfsnp', full.names=T)
+	pos_file = list.files('Data_conversion', pattern='vcfsnp', full.names=T)
 	pos_file = read.table(pos_file, sep=' ')
 	SNPs_info = read.table(assoc_file, sep=',', header=T)
 	if (padj){
@@ -160,12 +160,18 @@ get_SNPs_Ranges=function(assoc_file, padj){
 ## subset the nearest df by  %in% as.integer(rownames(SNPs_sign)))
 
 get_annot = function(genes, SNPs, pval, kb){
-	find_closest = distanceToNearest(genes, SNPs, ignore.strand = T)
-	genes_dist = as.data.frame(find_closest)
-	sign_SNPs = as.data.frame(SNPs)
-	sign_SNPs = subset(sign_SNPs, sign_SNPs <= pval)
-	sign_genes = subset(gene_dist, gene_dist$queryHits %in% rownames(sign_SNPs))
+	find_closest = distanceToNearest(genes, SNPs, ignore.strand = T) # get distance
+	genes_dist = as.data.frame(find_closest) # DF of distances
+	sign_SNPs = as.data.frame(SNPs) # df of SNPs
+	sign_SNPs = subset(sign_SNPs, sign_SNPs$scores <= pval) # subset for sign SNPs
+	sign_SNPs_dist = subset(genes_dist, genes_dist$subjectHits %in% rownames(sign_SNPs)) # extract sign SNPs distance
+	sign_SNPs_good = subset(sign_SNPs_dist, sign_SNPs_dist <= kb*1000) # extract genes by distance
+	genes_df= as.data.frame(genes) # df of annot
+	genes_infos = genes_df[sign_SNPs_dist$queryHits,] # subset for good genes
+# still need to do the final dataset
+	}
 	
+
 
 
 
