@@ -145,19 +145,12 @@ get_SNPs_Ranges=function(assoc_file, padj){
 	if (padj){
 		pType='Padj'
 		}
+	print(pType)
 	SNPs_data = GRanges(seqnames=pos_file$V1, 
 		ranges=IRanges(start=pos_file$V2, end = pos_file$V2), 
 		scores = SNPs_info[,pType])
 	SNPs_data
 	}
-
-## Getting SNPs data
-
-## nearest function
-## convert nearest obj to df so you have query (gene), subject(hits), and distance
-## convert SNPs_data do DF and subset scores columns by <= pval
-## get as.integer(colnames) of the subset genes, so you can subset distance DF
-## subset the nearest df by  %in% as.integer(rownames(SNPs_sign)))
 
 get_annot = function(genes, SNPs, pval, kb){
 	find_closest = distanceToNearest(genes, SNPs, ignore.strand = T) # get distance
@@ -165,10 +158,19 @@ get_annot = function(genes, SNPs, pval, kb){
 	sign_SNPs = as.data.frame(SNPs) # df of SNPs
 	sign_SNPs = subset(sign_SNPs, sign_SNPs$scores <= pval) # subset for sign SNPs
 	sign_SNPs_dist = subset(genes_dist, genes_dist$subjectHits %in% rownames(sign_SNPs)) # extract sign SNPs distance
-	sign_SNPs_good = subset(sign_SNPs_dist, sign_SNPs_dist <= kb*1000) # extract genes by distance
+	sign_SNPs_good = subset(sign_SNPs_dist, sign_SNPs_dist$distance <= kb*1000) # extract genes by distance
 	genes_df= as.data.frame(genes) # df of annot
-	genes_infos = genes_df[sign_SNPs_dist$queryHits,] # subset for good genes
-# still need to do the final dataset
+	genes_infos = genes_df[sign_SNPs_good$queryHits,] # subset for good genes
+	SNPs_infos = data.frame() 
+	for (i in sign_SNPs_good){
+		SNPs_infos = rbind.data.frame(SNPs_infos, subset(sign_SNPs, rownames(sign_SNPs) %in% sign_SNPs_good$subjectHits))
+		}
+	print(genes_infos)
+	print(SNPs_infos)
+	print(sign_SNPs_good)
+	final_data = cbind.data.frame(genes_infos[,c('ID', 'seqnames', 'start', 'end')], SNPs_infos$start, sign_SNPs_good$distance, SNPs_infos$scores)
+	colnames(final_data)=c('GeneID', 'Chr', 'Gene_Start', 'Gene_End', 'SNPs', 'distance', 'P')
+	final_data
 	}
 	
 

@@ -179,7 +179,8 @@ shinyServer(function(input, output){
 	shinyFileChoose(input, 'annot',  root=c(home=path.expand('~')))
 	GFF3_genes=reactive({
 		f=parseFilePaths(c(home=path.expand('~')), input$annot)
-		f=import.gff3(f[1,4])
+		print(f$datapath)
+		f=import.gff3(as.character(f$datapath))
 		genes=subset(f, f$type == 'gene') 
 		genes
 		})
@@ -188,6 +189,12 @@ shinyServer(function(input, output){
 		setwd(ProjFolder())
 		sign_file = input$assoc_res
 		get_SNPs_Ranges(sign_file$datapath, input$padj_type)
+		})
+	
+	output$annot_res = renderDataTable({
+		if(is.null(input$assoc_res))
+			return(NULL)
+		get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb)
 		})
 
 })

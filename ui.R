@@ -205,8 +205,11 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			tags$hr(),
 			sliderInput('pval_max', 'Select P values threshold', min=0, max=1, value = 0.05, step = 0.01),
 			checkboxInput('padj_type', 'Adjusted P values', value = T)	
+			),
+		mainPanel(
+			dataTableOutput('annot_res')
 			)
-		)		
+		)	
 ### after this keep the parenthesis
 	)
 )
