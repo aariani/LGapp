@@ -192,9 +192,10 @@ shinyServer(function(input, output){
 		})
 	
 	output$annot_res = renderDataTable({
-		if(is.null(input$assoc_res))
-			return(NULL)
-		get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb)
+		if(!is.null(input$assoc_res))
+		#	return(NULL)
+			get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb)
+		else {return(NULL)}
 		})
 
 })

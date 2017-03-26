@@ -200,7 +200,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			helpText('Select the output of either the population differentiation analysis
 				or the association analysis'),
 			tags$hr(),
-			sliderInput('dist_kb', 'Distance from SNPs (Kb)', min = 1, max = 100, value = 5),
+			sliderInput('dist_kb', 'Distance from SNPs (Kb)', min = 0, max = 200, value = 5),
 			helpText('Select the maximum distance between a significant SNPs and the nearest gene'),
 			tags$hr(),
 			sliderInput('pval_max', 'Select P values threshold', min=0, max=1, value = 0.05, step = 0.01),
