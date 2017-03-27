@@ -151,7 +151,13 @@ get_SNPs_Ranges=function(assoc_file, padj){
 	SNPs_data
 	}
 
-get_annot = function(genes, SNPs, pval, kb){
+get_annot = function(genes, SNPs, pval, kb, updateProgress = NULL){
+	for (i in 1:10){
+		if (is.function(updateProgress)) {
+               		text = ' ...'
+         	      	updateProgress(detail = text)
+               		}
+		}
 	find_closest = distanceToNearest(genes, SNPs, ignore.strand = T) # get distance
 	genes_dist = as.data.frame(find_closest) # DF of distances
 	sign_SNPs = as.data.frame(SNPs) # df of SNPs

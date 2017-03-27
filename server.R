@@ -192,10 +192,19 @@ shinyServer(function(input, output){
 		})
 	
 	output$annot_res = renderDataTable({
-		if(!is.null(input$assoc_res))
-		#	return(NULL)
-			get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb)
-		else {return(NULL)}
+		if(is.null(input$assoc_res))
+                        return(NULL)
+		progress <- shiny::Progress$new()
+                progress$set(message = "Computing data", value = 0)
+                on.exit(progress$close())
+                updateProgress <- function(value = NULL, detail = NULL) {
+                        if (is.null(value)) {
+                                value <- progress$getValue()
+                                value <- value + (progress$getMax() - value) / 5
+                                }
+                	progress$set(value = value, detail = detail)
+                	}
+                get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb, updateProgress)
 		})
 
 })
