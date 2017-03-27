@@ -99,6 +99,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				h3('Download PCA coordinates and loadings'),
 				numericInput('n_PCs', label=p('Select number of PCs to download'), value = 0, min = 0),
 				tags$hr(),
+				tags$head(tags$script(src = "message-handler.js")),
 				actionButton('download_PCA', 'Download PCA data')
 				),
 ### output biplot in an image, and table with loadings
@@ -126,6 +127,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			tags$hr(),
 			numericInput('n_K', label='Select best number of K', value = 0, min = 0),
 			tags$hr(),
+			tags$head(tags$script(src = "message-handler.js")),
 			actionButton('res', 'Download Results')
 			),
 		mainPanel(
@@ -151,6 +153,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 					'Bonferroni'='bonferroni', 'Holm'='holm', 'Hochberg'='hochberg', 'Hommel'='hommel', 
 					'Benjamini & Hochberg'='BH', 'Benjamini & Yekutieli'='BY', 'FDR'='fdr')),
 				tags$hr(),
+				tags$head(tags$script(src = "message-handler.js")),
 				actionButton('fst_res', 'Export Results')
 				),
 			mainPanel(
@@ -164,6 +167,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				tags$hr(),
 				h3('Convert Phenotype file'),
 				fileInput('pheno_all', 'Select phenotype file', accept='.csv'),
+				tags$head(tags$script(src = "message-handler.js")),
 				actionButton('writeEnv', 'Convert Files'),
 				helpText('This step convert the Phenotype file in single variable files'),
 				tags$hr(),
@@ -179,6 +183,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 				selectInput('padj', label='Select P values correction method', c('None' = 'none', 
 					'Bonferroni'='bonferroni', 'Holm'='holm', 'Hochberg'='hochberg', 'Hommel'='hommel',
 					'Benjamini & Hochberg'='BH', 'Benjamini & Yekutieli'='BY', 'FDR'='fdr')),
+				tags$head(tags$script(src = "message-handler.js")),
 				actionButton('lfmm_res', 'Export Results')
 				),
 			mainPanel(

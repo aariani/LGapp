@@ -79,7 +79,7 @@ shinyServer(function(input, output, session){
 			write.table(getBioclimData(), paste('Bioclimatic_data/Climatic_data','.csv', sep=''), 
 			sep=',', col.names=T, quote=F, row.names=F)
 			session$sendCustomMessage(type = 'testmessage',
-      				message = 'Data has been downloaded into Bioclimatic_data/Climatic_data.csv file')
+      				message = 'Data has been downloaded in the Bioclimatic_data folder')
 			})	
 ##############################
 #### PCA #####################
@@ -104,6 +104,8 @@ shinyServer(function(input, output, session){
 			pdf('Bioclimatic_data/PCA_biplot.pdf')
 			biplot(getPCAdata(), show.names='loadings',loading.col='blue')
 			dev.off()
+			session$sendCustomMessage(type = 'testmessage',
+                                message = 'Data has been downloaded in the Bioclimatic_data folder')
 			})						
 		
 ################################
@@ -125,8 +127,20 @@ shinyServer(function(input, output, session){
 
 	observeEvent(input$res, {
 		if (input$n_K > 0)
+			progress <- shiny::Progress$new()
+			progress$set(message = "Exporting data", value = 0)
+                	on.exit(progress$close())
+                	updateProgress <- function(value = NULL, detail = NULL) {
+                        if (is.null(value)) {
+                                value <- progress$getValue()
+                                value <- value + (progress$getMax() - value) / 5
+                                }
+                	progress$set(value = value, detail = detail)
+                        }
 			coordFile2=input$coord2
-			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath) 
+			exportTESS(TESS_analysis(), input$n_K, coordFile2$datapath, updateProgress) 
+			session$sendCustomMessage(type = 'testmessage',
+                                message = 'Data has been downloaded in the Population_Structure folder')
 			})
 
 ##################################
@@ -153,6 +167,8 @@ shinyServer(function(input, output, session){
 		dir.create('Population_differentiation')
 		setwd('Population_differentiation')
 		exportFst(Fst(), input$Kfst, input$padj)
+		session$sendCustomMessage(type = 'testmessage',
+                                message = 'Data has been downloaded in the Population_differentiation folder')
 		})
 
 ###################################
@@ -163,6 +179,8 @@ shinyServer(function(input, output, session){
 		dir.create('Association_analysis')
 		setwd('Association_analysis')
 		createEnv(phenofile$datapath)
+		session$sendCustomMessage(type = 'testmessage',
+                                message = 'ENV file has been downloaded in the Association_analysis folder')
 		})
 ### LFMM analysis
 	LFMM_analysis = eventReactive(input$lfmm_analysis, {
@@ -183,7 +201,9 @@ shinyServer(function(input, output, session){
 	observeEvent(input$lfmm_res, {
 		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
 		envFile = input$pheno
-		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj, envFile$name)		
+		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj, envFile$name)
+		session$sendCustomMessage(type = 'testmessage',
+                                message = 'Data has been downloaded in the Association_analysis folder')		
 		})
 
 

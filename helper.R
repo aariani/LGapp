@@ -70,7 +70,13 @@ getTESS_struct = function(genofile, coordfile, k, ploidy, rep){
 	tess3.obj
         }
 
-exportTESS = function(tess_obj, k, coordfile){
+exportTESS = function(tess_obj, k, coordfile, updateProgress = NULL){
+        for (i in 1:10){
+                if (is.function(updateProgress)) {
+                        text = ' ...'
+                        updateProgress(detail = text)
+                        }
+                }
 	coordinates = as.matrix(read.table(coordfile, sep = ',', header = T, row.name = 1))
 	coordinates = coordinates[, c(2,1)]
 	q.matrix <- qmatrix(tess_obj, K = k)
