@@ -27,7 +27,13 @@ plotMap=function(coord){
 
 
 #### extract bioclimatic variables
-extractBiovar=function(coord, climvar, folder){ ### need also the location of the
+extractBiovar=function(coord, climvar, folder, updateProgress = NULL){ ### need also the location of the
+	for (i in 1:10){
+                if (is.function(updateProgress)) {
+                        text = ' ...'
+                        updateProgress(detail = text)
+                        }
+                }
 	n=read.csv(coord, sep=',', header=T)
 	pos=n[,c(3,2)]
 	biofiles=list.files(path=folder, pattern='bil', full.names=T)

@@ -52,9 +52,19 @@ shinyServer(function(input, output){
 		})	
 ## get bioclimatic data
 	getBioclimData=reactive({
+                progress <- shiny::Progress$new()
+                progress$set(message = "Extracting data", value = 0)
+                on.exit(progress$close())
+                updateProgress <- function(value = NULL, detail = NULL) {
+                        if (is.null(value)) {
+                                value <- progress$getValue()
+                                value <- value + (progress$getMax() - value) / 5
+                                }
+                progress$set(value = value, detail = detail)
+                }
 		coordFile=input$coord
 		climFolder=parseDirPath(c(home=path.expand('~')), input$climdir)
-		extractBiovar(coordFile$datapath, input$climvar, climFolder) ### need also the location of the folder
+		extractBiovar(coordFile$datapath, input$climvar, climFolder, updateProgress) ### need also the location of the folder
 		})
 ## Output table
 	output$climTable=renderDataTable({
@@ -62,6 +72,7 @@ shinyServer(function(input, output){
 			return(NULL)
 		getBioclimData()
 		})
+
 	observeEvent(input$download_clim, {
 			setwd(ProjFolder())
 			dir.create('Bioclimatic_data')
