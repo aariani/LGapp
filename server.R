@@ -12,7 +12,7 @@ library(rtracklayer)
 
 source('helper.R')
 
-shinyServer(function(input, output){
+shinyServer(function(input, output, session){
 	shinyFileChoose(input, 'vcf',  root=c(home=path.expand('~')))
 	shinyDirChoose(input, 'outdir', root=c(home=path.expand('~')))
 	ProjFolder=reactive({parseDirPath(c(home=path.expand('~')), input$outdir)}) # THIS IS THE MAIN PROJECT FOLDER
@@ -61,7 +61,7 @@ shinyServer(function(input, output){
                                 value <- value + (progress$getMax() - value) / 5
                                 }
                 progress$set(value = value, detail = detail)
-                }
+                	}
 		coordFile=input$coord
 		climFolder=parseDirPath(c(home=path.expand('~')), input$climdir)
 		extractBiovar(coordFile$datapath, input$climvar, climFolder, updateProgress) ### need also the location of the folder
@@ -78,6 +78,8 @@ shinyServer(function(input, output){
 			dir.create('Bioclimatic_data')
 			write.table(getBioclimData(), paste('Bioclimatic_data/Climatic_data','.csv', sep=''), 
 			sep=',', col.names=T, quote=F, row.names=F)
+			session$sendCustomMessage(type = 'testmessage',
+      				message = 'Data has been downloaded into Bioclimatic_data/Climatic_data.csv file')
 			})	
 ##############################
 #### PCA #####################

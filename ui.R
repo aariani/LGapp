@@ -78,6 +78,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			shinyDirButton('climdir', 'Select Folder with bioclimatic data (bil files)', 'Please select folder with climatic data'),
 			helpText('Download climatic data to your computer from the ', a('WorldClim database', href='http://www.worldclim.org/current')),
 			tags$hr(),
+			tags$head(tags$script(src = "message-handler.js")),
 			actionButton('download_clim', label = 'Download Bioclimatic Variables')),
 			mainPanel(
 				htmlOutput('bioclim'),
