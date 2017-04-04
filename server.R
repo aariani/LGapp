@@ -240,4 +240,8 @@ shinyServer(function(input, output, session){
                 get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb, updateProgress)
 		})
 
+	observeEvent(input$annot_res, {
+		setwd(ProjFolder())
+		
+
 })

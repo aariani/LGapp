@@ -210,7 +210,8 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			helpText('Select the maximum distance between a significant SNPs and the nearest gene'),
 			tags$hr(),
 			sliderInput('pval_max', 'Select P values threshold', min=0, max=1, value = 0.05, step = 0.01),
-			checkboxInput('padj_type', 'Adjusted P values', value = T)	
+			checkboxInput('padj_type', 'Adjusted P values', value = T),	
+			actionButton('annot_res', 'Export Results')
 			),
 		mainPanel(
 			dataTableOutput('annot_res')
