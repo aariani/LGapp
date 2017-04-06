@@ -201,7 +201,7 @@ shinyServer(function(input, output, session){
 	observeEvent(input$lfmm_res, {
 		setwd(paste(ProjFolder(), 'Association_analysis', sep='/'))
 		envFile = input$pheno
-		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj, envFile$name)
+		exportLFMM(LFMM_analysis()[[1]], input$LF, input$padj2, envFile$name)
 		session$sendCustomMessage(type = 'testmessage',
                                 message = 'Data has been downloaded in the Association_analysis folder')		
 		})
@@ -212,7 +212,6 @@ shinyServer(function(input, output, session){
 	shinyFileChoose(input, 'annot',  root=c(home=path.expand('~')))
 	GFF3_genes=reactive({
 		f=parseFilePaths(c(home=path.expand('~')), input$annot)
-		print(f$datapath)
 		f=import.gff3(as.character(f$datapath))
 		genes=subset(f, f$type == 'gene') 
 		genes
@@ -221,6 +220,7 @@ shinyServer(function(input, output, session){
 	SNPs=reactive({
 		setwd(ProjFolder())
 		sign_file = input$assoc_res
+		print(sign_file$name)
 		get_SNPs_Ranges(sign_file$datapath, input$padj_type)
 		})
 	
@@ -242,6 +242,7 @@ shinyServer(function(input, output, session){
 
 	observeEvent(input$annot_res, {
 		setwd(ProjFolder())
+		})
 		
 
 })

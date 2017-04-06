@@ -108,7 +108,7 @@ exportFst = function(dat, k, padj){
 	dev.off()
 	dat = cbind.data.frame(dat, p.adjust(dat$P, method=padj))
 	colnames(dat)[5]='Padj'
-	write.table(dat, paste('Fst_result_table_K', k, '_', padj, '.csv', sep=''), sep=',',  col.name=T, row.name=F, quote=F)
+	write.table(dat, paste('Fst_results_table_K', k, '_', padj, '.csv', sep=''), sep=',',  col.name=T, row.name=F, quote=F)
 	}
 	
 createEnv = function(filein){
@@ -144,9 +144,10 @@ exportLFMM = function(res_df, k, padj, phenoFile){
 	hist(res_df$P, col='lightblue', main = 'Histogram of P values distribution', xlab = 'P values')
 	manhattan(res_df, ylim=c(0, -log10(min(res_df$P)) + 0.5))
 	dev.off()
+	print(padj)
 	res_final = cbind.data.frame(res_df, p.adjust(res_df$P, method = padj))
 	colnames(res_final)[5] = 'Padj'
-	write.table(res_final, paste('Association_results_table_K', k,'_', suffix, '.csv', sep=''), sep=',', col.name=T, row.name=F, quote=F)
+	write.table(res_final, paste('Association_results_table_K', k,'_', suffix, '_', padj, '.csv', sep=''), sep=',', col.name=T, row.name=F, quote=F)
 	}
 
 get_SNPs_Ranges=function(assoc_file, padj){
