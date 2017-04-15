@@ -177,16 +177,23 @@ get_annot = function(genes, SNPs, pval, kb, updateProgress = NULL){
 	sign_SNPs = subset(sign_SNPs, sign_SNPs$scores <= pval) # subset for sign SNPs
 	sign_SNPs_dist = subset(genes_dist, genes_dist$subjectHits %in% rownames(sign_SNPs)) # extract sign SNPs distance
 	sign_SNPs_good = subset(sign_SNPs_dist, sign_SNPs_dist$distance <= kb*1000) # extract genes by distance
-	genes_df= as.data.frame(genes) # df of annot
-	genes_infos = genes_df[sign_SNPs_good$queryHits,] # subset for good genes
-	SNPs_infos = data.frame() 
-	for (i in sign_SNPs_good$subjectHits){
-		SNPs_infos = rbind.data.frame(SNPs_infos, subset(sign_SNPs, rownames(sign_SNPs) %in% sign_SNPs_good$subjectHits))
+	if (dim(sign_SNPs_good)[1]> 0){
+		genes_df= as.data.frame(genes) # df of annot
+		genes_infos = genes_df[sign_SNPs_good$queryHits,] # subset for good genes
+		SNPs_infos = data.frame() 
+		for (i in sign_SNPs_good$subjectHits){
+			SNPs_infos = rbind.data.frame(SNPs_infos, subset(sign_SNPs, rownames(sign_SNPs) == i))
+			}
+		final_data = cbind.data.frame(genes_infos[,c('ID', 'seqnames', 'start', 'end')], SNPs_infos$start, sign_SNPs_good$distance, SNPs_infos$scores)
+		colnames(final_data)=c('GeneID', 'Chr', 'Gene_Start', 'Gene_End', 'SNPs', 'distance', 'P')
+		final_data=unique(final_data)
+		final_data
 		}
-	final_data = cbind.data.frame(genes_infos[,c('ID', 'seqnames', 'start', 'end')], SNPs_infos$start, sign_SNPs_good$distance, SNPs_infos$scores)
-	colnames(final_data)=c('GeneID', 'Chr', 'Gene_Start', 'Gene_End', 'SNPs', 'distance', 'P')
-	final_data=unique(final_data)
-	final_data
+	else {
+		final_data = rbind.data.frame(rep('NA', 7))
+		colnames(final_data)=c('GeneID', 'Chr', 'Gene_Start', 'Gene_End', 'SNPs', 'distance', 'P')
+		final_data
+		}
 	}
 	
 

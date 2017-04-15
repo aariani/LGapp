@@ -201,6 +201,7 @@ shinyUI(navbarPage('LGapp', theme=shinytheme('cosmo'),
 			h2('SNPs annotation'),
 			tags$hr(),
 			shinyFilesButton('annot', 'Select GFF3 annotation file', 'Select GFF', multiple=F),
+			h3(textOutput('gff3infos')),
 			tags$hr(),
 			fileInput('assoc_res', 'Select Association results file', accept='.csv'),
 			helpText('Select the output of either the population differentiation analysis

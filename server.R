@@ -216,12 +216,18 @@ shinyServer(function(input, output, session){
 		genes=subset(f, f$type == 'gene') 
 		genes
 		})
+	
+	output$gff3infos=renderText({
+		if (is.null(input$annot))
+                        return(NULL)
+		paste('GFF3 file loaded')
+		})
 
 	SNPs=reactive({
 		setwd(ProjFolder())
 		sign_file = input$assoc_res
-		print(sign_file$name)
-		get_SNPs_Ranges(sign_file$datapath, input$padj_type)
+		print(strsplit(sign_file$name, '.csv'))
+		snps = get_SNPs_Ranges(sign_file$datapath, input$padj_type)
 		})
 	
 	output$annot_res = renderDataTable({
@@ -242,7 +248,23 @@ shinyServer(function(input, output, session){
 
 	observeEvent(input$annot_res, {
 		setwd(ProjFolder())
-		})
-		
-
+		dir.create('SNPs_annotation')
+		snps_file = input$assoc_res
+		annot_res_index = strsplit(snps_file$name, '.csv')[[1]]
+		progress <- shiny::Progress$new()
+                progress$set(message = "Extract data", value = 0)
+                on.exit(progress$close())
+                updateProgress <- function(value = NULL, detail = NULL) {
+                        if (is.null(value)) {
+                                value <- progress$getValue()
+                                value <- value + (progress$getMax() - value) / 5
+                                }
+                        progress$set(value = value, detail = detail)
+                        }
+		write.table(get_annot(GFF3_genes(), SNPs(), input$pval_max, input$dist_kb, updateProgress),
+			paste('SNPs_annotation/Annotation_', annot_res_index, '.csv', sep=''),
+			sep=',', row.names=F, col.names=T, quote=F)
+		session$sendCustomMessage(type = 'testmessage',
+                                message = 'Data has been downloaded in the SNPs_annotation folder')
+		})		
 })
