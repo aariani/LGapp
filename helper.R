@@ -186,7 +186,7 @@ get_annot = function(genes, SNPs, pval, kb, updateProgress = NULL){
 			}
 		final_data = cbind.data.frame(genes_infos[,c('ID', 'seqnames', 'start', 'end')], SNPs_infos$start, sign_SNPs_good$distance, SNPs_infos$scores)
 		colnames(final_data)=c('GeneID', 'Chr', 'Gene_Start', 'Gene_End', 'SNPs', 'distance', 'P')
-		final_data=unique(final_data)
+	#	final_data=unique(final_data)
 		final_data
 		}
 	else {

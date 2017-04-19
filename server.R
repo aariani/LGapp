@@ -226,7 +226,6 @@ shinyServer(function(input, output, session){
 	SNPs=reactive({
 		setwd(ProjFolder())
 		sign_file = input$assoc_res
-		print(strsplit(sign_file$name, '.csv'))
 		snps = get_SNPs_Ranges(sign_file$datapath, input$padj_type)
 		})
 	
