@@ -97,6 +97,7 @@ shinyServer(function(input, output, session){
 		})
 	observeEvent(input$download_PCA, {
 		if (input$n_PCs > 0)
+			setwd(ProjFolder())
 			write.table(getPCAdata()$scores[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_coordinates_', 
 				input$n_PCs, '_PCs', '.csv', sep=''), sep=',', col.names=T, quote=F, row.name=T)
 			write.table(getPCAdata()$loadings[,1:input$n_PCs], paste('Bioclimatic_data/Climatic_PCA_loadings_', 
